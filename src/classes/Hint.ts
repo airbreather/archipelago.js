@@ -42,4 +42,12 @@ export class Hint {
     get entrance(): string {
         return this.#hint.entrance || "Vanilla";
     }
+
+    get uniqueKey(): string {
+        return `${this.#item.sender.slot}-${this.#item.locationId}`;
+    }
+
+    static getUniqueKey(hint: NetworkHint): string {
+        return `${hint.finding_player}-${hint.location}`;
+    }
 }
