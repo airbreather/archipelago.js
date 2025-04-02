@@ -26,8 +26,8 @@ The full API documentation is located [here](https://thephar.github.io/archipela
 while you are developing your JavaScript-based clients.
 
 This library supports 100% of the Archipelago network protocol referenced 
-[here](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md) as of **2024-11-03** 
-(0.5.1 RC1). See more information about [Archipelago](https://archipelago.gg) at their website.
+[here](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md) as of **2025-04-02** 
+(0.6.0). See more information about [Archipelago](https://archipelago.gg) at their website.
 
 ## Contribution
 

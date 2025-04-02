@@ -27,20 +27,20 @@
     "bugs": "https://github.com/ThePhar/archipelago.js/issues",
     "devDependencies": {
         "@eslint/js": "^9.23.0",
-        "@shipgirl/typedoc-plugin-versions": "^0.2.8",
+        "@shipgirl/typedoc-plugin-versions": "^0.3.0",
         "@stylistic/eslint-plugin": "^2.13.0",
         "@types/bun": "^1.2.8",
         "@types/eslint__js": "^8.42.3",
         "@types/node": "^22.13.17",
-        "@typhonjs-typedoc/typedoc-theme-dmt": "^0.2.3",
+        "@typhonjs-typedoc/typedoc-theme-dmt": "^0.3.1",
         "bun-plugin-dts": "^0.2.4",
         "eslint": "^9.23.0",
         "eslint-plugin-jsdoc": "^50.6.9",
         "eslint-plugin-simple-import-sort": "^12.1.1",
         "rimraf": "^6.0.1",
         "ts-node": "^10.9.2",
-        "typedoc": "^0.26.11",
-        "typescript": "^5.8.2",
+        "typedoc": "^0.27.3",
+        "typescript": "^5.7.3",
         "typescript-eslint": "^8.29.0"
     }
 }
