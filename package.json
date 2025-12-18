@@ -1,6 +1,6 @@
 {
-    "name": "archipelago.js",
-    "version": "2.0.4",
+    "name": "@airbreather/archipelago.js",
+    "version": "2.0.5-airbreather",
     "description": "A runtime-agnostic and zero dependency TypeScript/JavaScript library for communicating with Archipelago servers.",
     "license": "MIT",
     "type": "module",
@@ -20,10 +20,10 @@
         "build": "rimraf -rf dist && bun build.mjs",
         "docs": "typedoc --options typedoc.json",
         "lint": "eslint src",
-        "pack": "pnpm run lint && pnpm run build && pnpm run docs && pnpm pack --pack-destination packs"
+        "pack": "pnpm run lint && pnpm run build && pnpm pack --pack-destination packs"
     },
     "homepage": "https://archipelago.js.org",
-    "repository": "https://github.com/ThePhar/archipelago.js.git",
+    "repository": "https://github.com/airbreather/archipelago.js.git",
     "bugs": "https://github.com/ThePhar/archipelago.js/issues",
     "devDependencies": {
         "@eslint/js": "^9.15.0",
