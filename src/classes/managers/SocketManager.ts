@@ -110,8 +110,12 @@ export class SocketManager extends EventBasedManager<SocketEvents> {
 
                             // Reassign onclose and onerror now that connection looks stable.
                             if (this.#socket) {
-                                this.#socket.onclose = this.disconnect.bind(this);
-                                this.#socket.onerror = this.disconnect.bind(this);
+                                this.#socket.onclose = () => {
+                                    this.disconnect("close");
+                                }
+                                this.#socket.onerror = () => {
+                                    this.disconnect("error");
+                                }
                                 resolve(packet);
                                 return;
                             }
@@ -135,7 +139,7 @@ export class SocketManager extends EventBasedManager<SocketEvents> {
     /**
      * Disconnect from the current Archipelago server, if still connected.
      */
-    public disconnect(): void {
+    public disconnect(reason?: "close" | "error"): void {
         // Prevent additional re-runs if already disconnected.
         if (!this.connected) {
             return;
@@ -144,7 +148,7 @@ export class SocketManager extends EventBasedManager<SocketEvents> {
         this.#connected = false;
         this.#socket?.close();
         this.#socket = null;
-        this.emit("disconnected", []);
+        this.emit("disconnected", [reason ?? "unknown"]);
     }
 
     #parseMessage(event: MessageEvent<string>): void {
