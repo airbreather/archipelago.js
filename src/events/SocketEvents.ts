@@ -127,5 +127,11 @@ export type SocketEvents = {
      * for disconnect events raised by the WebSocket library itself, whereas "unknown" is for oddball cases where we
      * found that the client had been disconnected without a corresponding event having been raised.
      */
-    disconnected: [reason: "close" | "error" | "unknown"]
+    disconnected: []
+
+    /**
+     * Send through the event from {@link WebSocketEventMap.close}
+     * @param event The original {@link CloseEvent}.
+     */
+    closed: [event: CloseEvent]
 };
