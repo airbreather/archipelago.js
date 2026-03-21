@@ -138,6 +138,9 @@ export class SocketManager extends EventBasedManager<SocketEvents> {
 
     /**
      * Disconnect from the current Archipelago server, if still connected.
+     * @param closeEvent The original underlying {@link CloseEvent} that triggered the disconnection, if it was indeed
+     * caused by such an event.
+     * @remarks If the socket is already disconnected, this method will do nothing.
      */
     public disconnect(closeEvent?: CloseEvent): void {
         // Prevent additional re-runs if already disconnected.
