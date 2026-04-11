@@ -1,4 +1,4 @@
-import { permissions, slotTypes } from "./constants.ts";
+import { hintStatuses, permissions, slotTypes } from "./constants.ts";
 
 /**
  * A union of known errors the Archipelago server can send back to the client when they receive a
@@ -39,6 +39,11 @@ export type GamePackage = {
     readonly checksum: string
 };
 
+/** An interface for fetching data packages from a cache, Should return a {@link GamePackage} if available, else null */
+export interface DataPackageCache {
+    getPackage(game: string, checksum?: string): Promise<GamePackage | null>
+}
+
 /** A type union of all basic JSON-compatible types. */
 export type JSONSerializable =
     | string
@@ -73,8 +78,11 @@ export type NetworkHint = {
     /** The name of the entrance to the location where this item is located. */
     readonly entrance: string
 
-    /** The classification bit flags for this item. See {@link itemsHandlingFlags} for known flags. */
+    /** The classification bit flags for this item. See {@link itemClassifications} for known flags. */
     readonly item_flags: number
+
+    /** The current hint status for this location/item. */
+    readonly status: typeof hintStatuses[keyof typeof hintStatuses]
 };
 
 /**
@@ -93,7 +101,7 @@ export type NetworkItem = {
      */
     readonly player: number
 
-    /** The classification bit flags for this item. See {@link itemsHandlingFlags} for known flags. */
+    /** The classification bit flags for this item. See {@link itemClassifications} for known flags. */
     readonly flags: number
 };
 

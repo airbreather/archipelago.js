@@ -61,7 +61,12 @@ export class MessageManager extends EventBasedManager<MessageEvents> {
         text = text.trim();
         const request: SayPacket = { cmd: "Say", text };
         this.#client.socket.send(request);
-        await this.wait("chat", (message) => message === text);
+
+        if (text.startsWith("!admin ")) {
+            await this.wait("adminCommand", (message) => message === text);
+        } else {
+            await this.wait("chat", (message) => message === text);
+        }
     }
 
     #onPrintJSON(packet: PrintJSONPacket): void {
@@ -107,12 +112,12 @@ export class MessageManager extends EventBasedManager<MessageEvents> {
             }
         }
 
-        const text = nodes.map((node) => node.text).join();
+        const text = nodes.map((node) => node.text).join("");
 
         // Add the message to the log.
         if (this.#client.options.maximumMessages >= 1) {
-            this.log.push({ text, nodes });
-            this.log.splice(0, this.log.length - this.#client.options.maximumMessages);
+            this.#messages.push({ text, nodes });
+            this.#messages.splice(0, this.#messages.length - this.#client.options.maximumMessages);
         }
 
         // Fire relevant event.

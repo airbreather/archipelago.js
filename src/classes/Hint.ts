@@ -1,4 +1,4 @@
-import { NetworkHint } from "../api";
+import { hintStatuses, NetworkHint } from "../api";
 import { Client } from "./Client.ts";
 import { Item } from "./Item.ts";
 import { Player } from "./Player.ts";
@@ -28,18 +28,31 @@ export class Hint {
         );
     }
 
+    public updateStatus(status: typeof hintStatuses[keyof typeof hintStatuses]): void {
+        this.#client.socket.send({
+            cmd: "UpdateHint",
+            player: this.#hint.finding_player,
+            location: this.#hint.location,
+            status,
+        });
+    }
+
     /** Returns the item contained in this hint. */
     public get item(): Item {
         return this.#item;
     }
 
     /** Returns `true` if this item has been found. */
-    get found(): boolean {
+    public get found(): boolean {
         return this.#hint.found;
     }
 
     /** Returns the entrance this location is at if entrance data is available, otherwise `"Vanilla"`. */
-    get entrance(): string {
+    public get entrance(): string {
         return this.#hint.entrance || "Vanilla";
+    }
+
+    public get status(): typeof hintStatuses[keyof typeof hintStatuses] {
+        return this.#hint.status;
     }
 }
