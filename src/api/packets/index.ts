@@ -1,6 +1,7 @@
 import { BouncePacket } from "./client/Bounce.ts";
 import { ConnectPacket } from "./client/Connect.ts";
 import { ConnectUpdatePacket } from "./client/ConnectUpdate.ts";
+import { CreateHintsPacket } from "./client/CreateHints.ts";
 import { GetPacket } from "./client/Get.ts";
 import { GetDataPackagePacket } from "./client/GetDataPackage.ts";
 import { LocationChecksPacket } from "./client/LocationChecks.ts";
@@ -10,6 +11,7 @@ import { SetPacket } from "./client/Set.ts";
 import { SetNotifyPacket } from "./client/SetNotify.ts";
 import { StatusUpdatePacket } from "./client/StatusUpdate.ts";
 import { SyncPacket } from "./client/Sync.ts";
+import { UpdateHintPacket } from "./client/UpdateHint.ts";
 import { BouncedPacket } from "./server/Bounced.ts";
 import { ConnectedPacket } from "./server/Connected.ts";
 import { ConnectionRefusedPacket } from "./server/ConnectionRefused.ts";
@@ -26,6 +28,7 @@ import { SetReplyPacket } from "./server/SetReply.ts";
 export * from "./client/Bounce.ts";
 export * from "./client/Connect.ts";
 export * from "./client/ConnectUpdate.ts";
+export * from "./client/CreateHints.ts";
 export * from "./client/Get.ts";
 export * from "./client/GetDataPackage.ts";
 export * from "./client/LocationChecks.ts";
@@ -35,6 +38,7 @@ export * from "./client/Set.ts";
 export * from "./client/SetNotify.ts";
 export * from "./client/StatusUpdate.ts";
 export * from "./client/Sync.ts";
+export * from "./client/UpdateHint.ts";
 export * from "./server/Bounced.ts";
 export * from "./server/Connected.ts";
 export * from "./server/ConnectionRefused.ts";
@@ -50,6 +54,7 @@ export * from "./server/SetReply.ts";
 
 export type ClientPacket =
     | BouncePacket
+    | CreateHintsPacket
     | ConnectPacket
     | ConnectUpdatePacket
     | GetPacket
@@ -60,7 +65,8 @@ export type ClientPacket =
     | SetPacket
     | SetNotifyPacket
     | StatusUpdatePacket
-    | SyncPacket;
+    | SyncPacket
+    | UpdateHintPacket;
 
 export type ServerPacket =
     | BouncedPacket

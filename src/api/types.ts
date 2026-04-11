@@ -1,4 +1,4 @@
-import { permissions, slotTypes } from "./constants.ts";
+import { hintStatuses, permissions, slotTypes } from "./constants.ts";
 
 /**
  * A union of known errors the Archipelago server can send back to the client when they receive a
@@ -80,6 +80,9 @@ export type NetworkHint = {
 
     /** The classification bit flags for this item. See {@link itemClassifications} for known flags. */
     readonly item_flags: number
+
+    /** The current hint status for this location/item. */
+    readonly status: typeof hintStatuses[keyof typeof hintStatuses]
 };
 
 /**
