@@ -61,7 +61,12 @@ export class MessageManager extends EventBasedManager<MessageEvents> {
         text = text.trim();
         const request: SayPacket = { cmd: "Say", text };
         this.#client.socket.send(request);
-        await this.wait("chat", (message) => message === text);
+
+        if (text.startsWith("!admin ")) {
+            await this.wait("adminCommand", (message) => message === text);
+        } else {
+            await this.wait("chat", (message) => message === text);
+        }
     }
 
     #onPrintJSON(packet: PrintJSONPacket): void {
