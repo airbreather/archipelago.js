@@ -78,7 +78,7 @@ export type NetworkHint = {
     /** The name of the entrance to the location where this item is located. */
     readonly entrance: string
 
-    /** The classification bit flags for this item. See {@link itemsHandlingFlags} for known flags. */
+    /** The classification bit flags for this item. See {@link itemClassifications} for known flags. */
     readonly item_flags: number
 };
 
@@ -98,7 +98,7 @@ export type NetworkItem = {
      */
     readonly player: number
 
-    /** The classification bit flags for this item. See {@link itemsHandlingFlags} for known flags. */
+    /** The classification bit flags for this item. See {@link itemClassifications} for known flags. */
     readonly flags: number
 };
 
