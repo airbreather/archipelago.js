@@ -31,8 +31,8 @@
 
     "dmtFavicon": "./assets/favicon.png",
     "dmtLinksService": {
-        "GitHub": "https://github.com/ThePhar/archipelago.js",
+        "GitHub": "https://github.com/airbreather/archipelago.js",
         "Discord": "https://discord.gg/8Z65BR2",
-        "NPM": "https://www.npmjs.com/package/archipelago.js"
+        "NPM": "https://www.npmjs.com/package/@airbreather/archipelago.js"
     }
 }

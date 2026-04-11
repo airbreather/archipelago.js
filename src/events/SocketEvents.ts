@@ -123,6 +123,15 @@ export type SocketEvents = {
 
     /**
      * Fires when the client has lost connection to the server, intentionally or not.
+     * @param reason The reason the client disconnected. Can be either "close", "error", or "unknown". The first two are
+     * for disconnect events raised by the WebSocket library itself, whereas "unknown" is for oddball cases where we
+     * found that the client had been disconnected without a corresponding event having been raised.
      */
     disconnected: []
+
+    /**
+     * Send through the event from {@link WebSocketEventMap.close}
+     * @param event The original {@link CloseEvent}.
+     */
+    closed: [event: CloseEvent]
 };
