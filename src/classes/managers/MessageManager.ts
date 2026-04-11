@@ -107,7 +107,7 @@ export class MessageManager extends EventBasedManager<MessageEvents> {
             }
         }
 
-        const text = nodes.map((node) => node.text).join();
+        const text = nodes.map((node) => node.text).join("");
 
         // Add the message to the log.
         if (this.#client.options.maximumMessages >= 1) {
