@@ -1,4 +1,11 @@
-import { clientStatuses, ConnectedPacket, ConnectionRefusedPacket, ConnectPacket, JSONRecord } from "../api";
+import {
+    clientStatuses,
+    ConnectedPacket,
+    ConnectionRefusedPacket,
+    ConnectPacket,
+    hintStatuses,
+    JSONRecord,
+} from "../api";
 import { ArgumentError, LoginError, SocketError, UnauthenticatedError } from "../errors.ts";
 import { ClientOptions, defaultClientOptions } from "../interfaces/ClientOptions.ts";
 import { ConnectionOptions, defaultConnectionOptions } from "../interfaces/ConnectionOptions.ts";
@@ -316,6 +323,18 @@ export class Client {
             this.players.self,
             this.players.findPlayer(item.player) as Player),
         );
+    }
+
+    /**
+     * Creates hints for a list of locations. If a player is supplied, creates hints for the player's locations instead.
+     *
+     * Does not return anything.
+     * @param locations A list of locations to create hints for.
+     * @param player The player that owns the locations being hinted.
+     * @param status The status to automatically set for this hint.
+     */
+    public hint(locations: number[], player?: number, status?: typeof hintStatuses[keyof typeof hintStatuses]): void {
+        this.socket.send({ cmd: "CreateHints", locations, player, status });
     }
 
     /**

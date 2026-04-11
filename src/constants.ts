@@ -4,9 +4,9 @@
  *
  * Version is represented in the format: `major.minor.build`.
  */
-export const targetVersion = { major: 0, minor: 5, build: 1 } as const;
+export const targetVersion = { major: 0, minor: 6, build: 3 } as const;
 
 // Phar if you forget to update this on release, I swear to god.
 
 /** The version of this library. */
-export const libraryVersion = "2.0.4";
+export const libraryVersion = "2.1.0";

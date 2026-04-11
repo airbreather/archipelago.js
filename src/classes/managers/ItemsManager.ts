@@ -13,7 +13,7 @@ import { EventBasedManager } from "./EventBasedManager.ts";
 export class ItemsManager extends EventBasedManager<ItemEvents> {
     readonly #client: Client;
     #received: Item[] = [];
-    #hints: Hint[] = [];
+    #hints: Record<string, Hint> = {};
 
     /**
      * Instantiates a new ItemsManager.
@@ -43,7 +43,7 @@ export class ItemsManager extends EventBasedManager<ItemEvents> {
                 this.emit("itemsReceived", [this.#received.slice(packet.index, packet.index + count), packet.index]);
             })
             .on("connected", () => {
-                this.#hints = [];
+                this.#hints = {};
                 this.#received = [];
                 this.#client.storage
                     .notify(
@@ -52,8 +52,11 @@ export class ItemsManager extends EventBasedManager<ItemEvents> {
                     )
                     .then((data) => {
                         const hints = data[`_read_hints_${this.#client.players.self.team}_${this.#client.players.self.slot}`] as NetworkHint[];
-                        this.#hints = hints.map((hint) => new Hint(this.#client, hint));
-                        this.emit("hintsInitialized", [this.#hints]);
+                        for (const hint of hints) {
+                            this.#hints[`${hint.finding_player}-${hint.location}`] = new Hint(this.#client, hint);
+                        }
+
+                        this.emit("hintsInitialized", [Object.values(this.#hints)]);
                     })
                     .catch((error) => {
                         throw error;
@@ -73,7 +76,7 @@ export class ItemsManager extends EventBasedManager<ItemEvents> {
      * {@link ItemEvents.hintsInitialized} event.
      */
     public get hints(): Hint[] {
-        return [...this.#hints];
+        return Object.values(this.#hints);
     }
 
     /** Return the number of items received. */
@@ -82,13 +85,15 @@ export class ItemsManager extends EventBasedManager<ItemEvents> {
     }
 
     #receivedHint(_: string, hints: NetworkHint[]): void {
-        for (let i = 0; i < hints.length; i++) {
-            if (this.#hints[i] === undefined) {
-                this.#hints[i] = new Hint(this.#client, hints[i]);
-                this.emit("hintReceived", [this.#hints[i]]);
-            } else if (this.#hints[i].found !== hints[i].found) {
-                this.#hints[i] = new Hint(this.#client, hints[i]);
-                this.emit("hintFound", [this.#hints[i]]);
+        for (const hint of hints) {
+            const id = `${hint.finding_player}-${hint.location}`;
+
+            if (this.#hints[id] === undefined) {
+                this.#hints[id] = new Hint(this.#client, hint);
+                this.emit("hintReceived", [this.#hints[id]]);
+            } else if (this.#hints[id] && this.#hints[id].found !== hint.found) {
+                this.#hints[id] = new Hint(this.#client, hint);
+                this.emit("hintFound", [this.#hints[id]]);
             }
         }
     }
