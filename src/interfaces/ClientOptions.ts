@@ -27,8 +27,9 @@ export interface ClientOptions {
      * If enabled, logs the game, library version, and user agent to data storage, which can be used for debugging
      * purposes.
      * @default true
+     * @deprecated This functionality will be removed in version 3.0.0.
      */
-    debugLogVersions: boolean
+    debugLogVersions?: boolean
 }
 
 /**
@@ -39,5 +40,5 @@ export const defaultClientOptions: Required<ClientOptions> = {
     timeout: 10000,
     autoFetchDataPackage: true,
     maximumMessages: 1000,
-    debugLogVersions: true,
+    debugLogVersions: false,
 };
