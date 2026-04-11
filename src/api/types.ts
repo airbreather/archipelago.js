@@ -39,6 +39,11 @@ export type GamePackage = {
     readonly checksum: string
 };
 
+/** An interface for fetching data packages from a cache, Should return a {@link GamePackage} if available, else null */
+export interface DataPackageCache {
+    getPackage(game: string, checksum?: string): Promise<GamePackage | null>
+}
+
 /** A type union of all basic JSON-compatible types. */
 export type JSONSerializable =
     | string

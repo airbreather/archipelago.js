@@ -1,4 +1,4 @@
-import { DataPackage, GamePackage, GetDataPackagePacket } from "../../api";
+import { DataPackage, DataPackageCache, GamePackage, GetDataPackagePacket } from "../../api";
 import { Client } from "../Client.ts";
 import { PackageMetadata } from "../PackageMetadata.ts";
 
@@ -10,6 +10,7 @@ export class DataPackageManager {
     readonly #packages: Map<string, PackageMetadata> = new Map();
     readonly #checksums: Map<string, string> = new Map();
     readonly #games: Set<string> = new Set();
+    #cache: DataPackageCache | null = null;
 
     /**
      * Instantiates a new DataPackageManager. Should only be instantiated by creating a new {@link Client}.
@@ -19,7 +20,6 @@ export class DataPackageManager {
     public constructor(client: Client) {
         this.#client = client;
         this.#client.socket.on("roomInfo", (packet) => {
-            this.#packages.clear();
             this.#checksums.clear();
             this.#games.clear();
 
@@ -38,6 +38,10 @@ export class DataPackageManager {
      */
     public findPackage(game: string): PackageMetadata | null {
         return this.#packages.get(game) ?? null;
+    }
+
+    public setCache(cache: DataPackageCache) {
+        this.#cache = cache;
     }
 
     /**
@@ -69,6 +73,24 @@ export class DataPackageManager {
             // Any other situation, it's not needed.
             return false;
         });
+
+        // Check for games in cache prior to requesting data package from server
+        if (this.#cache) {
+            const data: DataPackage = { games: {} };
+            const notFoundGames = [];
+            for (const game of games) {
+                const cachedPackage = await this.#cache.getPackage(game, this.#checksums.get(game));
+                if (cachedPackage) {
+                    data.games[game] = cachedPackage;
+                } else {
+                    notFoundGames.push(game);
+                }
+            }
+            if (update) {
+                this.importPackage(data);
+            }
+            games = notFoundGames;
+        }
 
         // Request each game individually to reduce likelihood of a large packet causing a spike in network usage.
         const data: DataPackage = { games: {} };
@@ -138,7 +160,7 @@ export class DataPackageManager {
      */
     public exportPackage(): DataPackage {
         return {
-            games: this.#packages.entries().reduce((games, [game, pkg]) => {
+            games: [...this.#packages.entries()].reduce((games, [game, pkg]) => {
                 games[game] = pkg.exportPackage();
                 return games;
             }, {} as Record<string, GamePackage>),
