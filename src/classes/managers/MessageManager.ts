@@ -111,8 +111,8 @@ export class MessageManager extends EventBasedManager<MessageEvents> {
 
         // Add the message to the log.
         if (this.#client.options.maximumMessages >= 1) {
-            this.log.push({ text, nodes });
-            this.log.splice(0, this.log.length - this.#client.options.maximumMessages);
+            this.#messages.push({ text, nodes });
+            this.#messages.splice(0, this.#messages.length - this.#client.options.maximumMessages);
         }
 
         // Fire relevant event.
