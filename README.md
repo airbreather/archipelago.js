@@ -16,9 +16,9 @@ Targeted to work on all major desktop and mobile browsers ([Firefox](https://www
 
 Install via `npm install archipelago.js` (or via your preferred package manager's flavor).
 
-## Quick Start Guide
+## Starting Guide
 
-Check out the quick start documentation [here](https://archipelago.js.org/stable/documents/Quick_Start.html)!
+Check out the intro documentation [here](https://archipelago.js.org/stable/documents/Introduction.html)!
 
 ## API Documentation
 
@@ -26,8 +26,8 @@ The full API documentation is located [here](https://thephar.github.io/archipela
 while you are developing your JavaScript-based clients.
 
 This library supports 100% of the Archipelago network protocol referenced 
-[here](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md) as of **2024-11-03** 
-(0.5.1 RC1). See more information about [Archipelago](https://archipelago.gg) at their website.
+[here](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md) as of **2026-04-11** 
+(0.6.7). See more information about [Archipelago](https://archipelago.gg) at their website.
 
 ## Contribution
 
