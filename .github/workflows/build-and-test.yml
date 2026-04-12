@@ -1,0 +1,77 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - main
+      - srs-bsns
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Generate world
+        run: |
+          podman run \
+            -v ${{ github.workspace }}/test/integration/smoke-test/yaml:/data/Players \
+            -v ${{ github.workspace }}/test/integration/smoke-test/output:/data/Output \
+            quay.io/airbreather/archipelagomw:20260412 \
+            Generate.py \
+              --player_files_path /data/Players \
+              --outputpath /data/Output
+
+      - name: Start Archipelago
+        id: start_archipelago
+        run: |
+          mv test/integration/smoke-test/output/{AP*,smoke-test}.zip
+          container_id=$(podman run \
+            -d \
+            -p 38281:38281 \
+            -v ${{ github.workspace }}/test/integration/server-logs:/opt/Archipelago/logs \
+            -v ${{ github.workspace }}/test/integration/smoke-test/output/smoke-test.zip:/data/Output/smoke-test.zip \
+            quay.io/airbreather/archipelagomw:20260412 \
+            MultiServer.py \
+              /data/Output/smoke-test.zip \
+              --disable_save \
+              --hint_cost 0 \
+              --release_mode disabled \
+            )
+          while ! grep -ri 'listening on .*:38281$' ${{ github.workspace }}/test/integration/server-logs; do sleep 0.1; done
+          echo "ARCHIPELAGO_CONTAINER_ID=$container_id" >> "$GITHUB_ENV"
+
+      - name: Run All Non-Integration Tests
+        if: steps.start_archipelago.outcome != 'success'
+        run: pnpm run coverage -- --tags-filter="!integration"
+
+      - name: Run All Tests
+        if: steps.start_archipelago.outcome == 'success'
+        run: pnpm run coverage
+
+      - name: Stop Archipelago
+        if: steps.start_archipelago.outcome == 'success'
+        run: podman stop "$ARCHIPELAGO_CONTAINER_ID"
+
+      - name: 'Report Coverage'
+        if: always()
+        uses: davelosert/vitest-coverage-report-action@v2
+        with:
+          file-coverage-mode: 'all'

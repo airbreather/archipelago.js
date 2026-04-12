@@ -10,11 +10,11 @@ export const test = baseTest
         return client;
     });
 
-test("smoke test", async ({ client }) => {
+test("smoke test", { tags: "integration" }, async ({ client }) => {
     const url = "ws://localhost:38281";
-    const slotName = "Ratthew";
+    const slotName = "APQuestPlayer";
 
-    await expect(client.login(url, slotName, "Autopelago")).resolves.not.toThrow();
+    await expect(client.login(url, slotName, "APQuest")).resolves.not.toThrow();
 
     const unlikelyMessage = "it is unlikely that someone would send this message especially with this speling error";
 
