@@ -59,19 +59,19 @@ jobs:
           echo "ARCHIPELAGO_CONTAINER_ID=$container_id" >> "$GITHUB_ENV"
 
       - name: Run All Non-Integration Tests
-        if: steps.start_archipelago.outcome != 'success'
+        if: (!cancelled() && steps.start_archipelago.outcome != 'success')
         run: pnpm run coverage -- --tags-filter="!integration"
 
       - name: Run All Tests
-        if: steps.start_archipelago.outcome == 'success'
+        if: (!cancelled() && steps.start_archipelago.outcome == 'success')
         run: pnpm run coverage
 
       - name: Stop Archipelago
-        if: steps.start_archipelago.outcome == 'success'
+        if: (!cancelled() && steps.start_archipelago.outcome == 'success')
         run: podman stop "$ARCHIPELAGO_CONTAINER_ID"
 
       - name: 'Report Coverage'
-        if: always()
+        if: (!cancelled())
         uses: davelosert/vitest-coverage-report-action@v2
         with:
           file-coverage-mode: 'all'
