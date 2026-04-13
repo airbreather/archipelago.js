@@ -32,8 +32,8 @@ jobs:
       - name: Generate world
         run: |
           podman run \
-            -v ${{ github.workspace }}/test/integration/smoke-test/yaml:/data/Players \
-            -v ${{ github.workspace }}/test/integration/smoke-test/output:/data/Output \
+            --volume ${{ github.workspace }}/test/integration/smoke-test/yaml:/data/Players \
+            --volume ${{ github.workspace }}/test/integration/smoke-test/output:/data/Output \
             quay.io/airbreather/archipelagomw:20260412 \
             Generate.py \
               --player_files_path /data/Players \
@@ -45,11 +45,11 @@ jobs:
         run: |
           mv test/integration/smoke-test/output/{AP*,smoke-test}.zip
           container_id=$(podman run \
-            -d \
-            -rm \
-            -p 38281:38281 \
-            -v ${{ github.workspace }}/test/integration/server-logs:/opt/Archipelago/logs \
-            -v ${{ github.workspace }}/test/integration/smoke-test/output/smoke-test.zip:/data/Output/smoke-test.zip \
+            --detach \
+            --rm \
+            --publish 38281:38281 \
+            --volume ${{ github.workspace }}/test/integration/server-logs:/opt/Archipelago/logs \
+            --volume ${{ github.workspace }}/test/integration/smoke-test/output/smoke-test.zip:/data/Output/smoke-test.zip \
             quay.io/airbreather/archipelagomw:20260412 \
             MultiServer.py \
               /data/Output/smoke-test.zip \
