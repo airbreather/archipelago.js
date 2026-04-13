@@ -14,15 +14,17 @@
         "not op_mini all"
     ],
     "engines": {
-        "node": ">= 24.0.0"
+        "node": ">= 18.0.0"
     },
     "scripts": {
         "build": "rimraf -rf dist && bun build.mjs",
         "docs": "typedoc --options typedoc.json",
         "lint": "eslint src test",
         "pack": "pnpm run lint && pnpm run build && pnpm run docs && pnpm pack --pack-destination packs",
-        "test": "vitest",
-        "coverage": "vitest run --coverage"
+        "test": "vitest --tags-filter='!integration'",
+        "test:coverage": "$npm_execpath run test -- --coverage",
+        "full-test": "vitest",
+        "full-test:coverage": "$npm_execpath run full-test -- --coverage"
     },
     "homepage": "https://archipelago.js.org",
     "repository": "https://github.com/airbreather/archipelago.js.git",

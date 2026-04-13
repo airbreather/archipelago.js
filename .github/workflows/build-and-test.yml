@@ -41,10 +41,12 @@ jobs:
 
       - name: Start Archipelago
         id: start_archipelago
+        timeout-minutes: 1
         run: |
           mv test/integration/smoke-test/output/{AP*,smoke-test}.zip
           container_id=$(podman run \
             -d \
+            -rm \
             -p 38281:38281 \
             -v ${{ github.workspace }}/test/integration/server-logs:/opt/Archipelago/logs \
             -v ${{ github.workspace }}/test/integration/smoke-test/output/smoke-test.zip:/data/Output/smoke-test.zip \
@@ -58,13 +60,13 @@ jobs:
           while ! grep -ri 'listening on .*:38281$' ${{ github.workspace }}/test/integration/server-logs; do sleep 0.1; done
           echo "ARCHIPELAGO_CONTAINER_ID=$container_id" >> "$GITHUB_ENV"
 
-      - name: Run All Non-Integration Tests
+      - name: Run Only Non-Integration Tests
         if: (!cancelled() && steps.start_archipelago.outcome != 'success')
-        run: pnpm run coverage -- --tags-filter="!integration"
+        run: pnpm run test:coverage
 
       - name: Run All Tests
         if: (!cancelled() && steps.start_archipelago.outcome == 'success')
-        run: pnpm run coverage
+        run: pnpm run full-test:coverage
 
       - name: Stop Archipelago
         if: (!cancelled() && steps.start_archipelago.outcome == 'success')
