@@ -22,9 +22,9 @@
         "lint": "eslint src test",
         "pack": "pnpm run lint && pnpm run build && pnpm run docs && pnpm pack --pack-destination packs",
         "test": "vitest --tags-filter='!integration'",
-        "test:coverage": "$npm_execpath run test -- --coverage",
+        "test:coverage": "$npm_execpath run test --coverage",
         "full-test": "vitest",
-        "full-test:coverage": "$npm_execpath run full-test -- --coverage"
+        "full-test:coverage": "$npm_execpath run full-test --coverage"
     },
     "homepage": "https://archipelago.js.org",
     "repository": "https://github.com/airbreather/archipelago.js.git",
