@@ -27,5 +27,8 @@ jobs:
       - name: Install dependencies
         run: bun install
 
-      - name: Run Tests
+      - name: Run tests
         run: bun test --coverage
+
+      - name: Report coverage
+        uses: 70-10/bun-coverage-report-action@v1.0.3
