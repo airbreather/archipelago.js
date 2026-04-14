@@ -30,7 +30,12 @@ jobs:
       - name: Run tests
         run: bun test --coverage --coverage-reporter=lcov
 
+      - name: Setup LCOV
+        if: (!cancelled())
+        uses: hrishikesh-kadam/setup-lcov@v1
+
       - name: Report coverage
+        if: (!cancelled())
         uses: zgosalvez/github-actions-report-lcov@v7
         with:
           coverage-files: coverage/lcov.info
