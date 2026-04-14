@@ -43,7 +43,7 @@ jobs:
           nix-shell \
             -p archipelago \
             --run "archipelago MultiServer -- $(nix-build $build --no-out-link)/$zip" '<nixpkgs>' >$log &
-          while ! grep -i 'listening on .*:38281$' $log >/dev/null; do sleep 0.1; done
+          while ! grep -i 'listening on .*:38281$' $log 2>/dev/null; do sleep 0.1; done
           pnpm run full-test:coverage
 
       - name: Run Only Non-Integration Tests
