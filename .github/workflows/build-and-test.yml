@@ -20,6 +20,7 @@ jobs:
           nix_conf: |
             keep-env-derivations = true
             keep-outputs = true
+            nix-path = nixpkgs=channel:nixos-unstable
 
       - name: Restore and save Nix store
         uses: nix-community/cache-nix-action@v7
