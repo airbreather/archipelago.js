@@ -11,10 +11,12 @@
         "resolveJsonModule": true,
         "allowJs": true,
         "checkJs": true,
-        "noEmit": true
+        "noEmit": true,
+        "types": [
+            "@types/bun"
+        ]
     },
     "include": [
-        "vitest.config.ts",
         "src",
         "test"
     ]

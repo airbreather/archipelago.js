@@ -1,36 +1,33 @@
-import { expect, test as baseTest } from "vitest";
+import { describe, afterAll, test } from "bun:test";
 
 import { Client } from "../../src";
 
-export const test = baseTest
-    // eslint-disable-next-line no-empty-pattern -- required for vitest
-    .extend("client", ({}, { onCleanup }) => {
-        const client = new Client();
-        onCleanup(() => client.socket.disconnect());
-        return client;
-    });
+describe("smoke tests", () => {
+    const client = new Client();
+    afterAll(() => client.socket.disconnect());
 
-test("smoke test", { tags: "integration" }, async ({ client }) => {
-    const url = "ws://localhost:38281";
-    const slotName = "APQuestPlayer";
+    test("smoke test", async () => {
+        const url = "ws://localhost:38281";
+        const slotName = "APQuestPlayer";
 
-    await expect(client.login(url, slotName, "APQuest")).resolves.not.toThrow();
+        await client.login(url, slotName, "APQuest");
 
-    const unlikelyMessage = "it is unlikely that someone would send this message especially with this speling error";
+        const unlikelyMessage = "it is unlikely that someone would send this message especially with this speling error";
 
-    const messageReceived = new Promise<void>((resolve, reject) => {
-        const timeout = setTimeout(() => {
-            reject(new Error("Timeout waiting for message response"));
-        }, 5000);
+        const messageReceived = new Promise<void>((resolve, reject) => {
+            const timeout = setTimeout(() => {
+                reject(new Error("Timeout waiting for message response"));
+            }, 5000);
 
-        client.messages.on("message", (text) => {
-            if (text.includes(unlikelyMessage)) {
-                clearTimeout(timeout);
-                resolve();
-            }
+            client.messages.on("message", (text) => {
+                if (text.includes(unlikelyMessage)) {
+                    clearTimeout(timeout);
+                    resolve();
+                }
+            });
         });
-    });
 
-    await expect(client.messages.say(unlikelyMessage)).resolves.not.toThrow();
-    await expect(messageReceived).resolves.not.toThrow();
+        await client.messages.say(unlikelyMessage);
+        await messageReceived;
+    });
 });
