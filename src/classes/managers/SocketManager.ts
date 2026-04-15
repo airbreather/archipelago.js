@@ -195,24 +195,10 @@ export class SocketManager extends EventBasedManager<SocketEvents> {
     }
 
     #findWebSocket(): typeof WebSocket | null {
-        let IsomorphousWebSocket: typeof WebSocket | null = null;
-        if (typeof window !== "undefined") {
-            // @ts-expect-error WebSocket may not exist in this context.
-            IsomorphousWebSocket = window.WebSocket || window.MozWebSocket;
-        } else if (typeof global !== "undefined") {
-            // @ts-expect-error WebSocket may not exist in this context.
-            IsomorphousWebSocket = global.WebSocket || global.MozWebSocket;
-        } else if (typeof self !== "undefined") {
-            // @ts-expect-error WebSocket may not exist in this context.
-            IsomorphousWebSocket = self.WebSocket || self.MozWebSocket;
-        } else if (typeof WebSocket !== "undefined") {
-            IsomorphousWebSocket = WebSocket;
-            // @ts-expect-error WebSocket may not exist in this context.
-        } else if (typeof MozWebSocket !== "undefined") {
-            // @ts-expect-error WebSocket may not exist in this context.
-            IsomorphousWebSocket = MozWebSocket as WebSocket;
+        if (typeof WebSocket !== "undefined") {
+            return WebSocket;
         }
 
-        return IsomorphousWebSocket;
+        return null;
     }
 }
