@@ -21,9 +21,9 @@
         "lint": "eslint src test",
         "prepack": "bun run lint && bun build --sourcemap=linked --production --outdir=dist src/index.ts",
         "test": "vitest --tags-filter='!integration'",
-        "test:coverage": "$npm_execpath run test --coverage",
+        "test:coverage": "bun run test --coverage",
         "full-test": "vitest",
-        "full-test:coverage": "$npm_execpath run full-test --coverage"
+        "full-test:coverage": "bun run full-test --coverage"
     },
     "homepage": "https://archipelago.js.org",
     "repository": "https://github.com/airbreather/archipelago.js.git",

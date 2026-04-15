@@ -1,5 +1,3 @@
-import * as util from "node:util";
-
 import { ClientPacket, RoomInfoPacket, ServerPacket } from "../../api";
 import { SocketError } from "../../errors.ts";
 import { SocketEvents } from "../../events/SocketEvents.ts";
@@ -198,35 +196,23 @@ export class SocketManager extends EventBasedManager<SocketEvents> {
 
     #findWebSocket(): typeof WebSocket | null {
         let IsomorphousWebSocket: typeof WebSocket | null = null;
-        if (typeof globalThis !== "undefined") {
-            if (typeof globalThis.WebSocket !== "undefined") {
-                IsomorphousWebSocket = globalThis.WebSocket;
-                console.log("typeof globalThis.WebSocket !== \"undefined\"");
-                // @ts-expect-error WebSocket may not exist in this context.
-            } else if (typeof globalThis.MozWebSocket !== "undefined") {
-                // @ts-expect-error WebSocket may not exist in this context.
-                IsomorphousWebSocket = MozWebSocket as WebSocket;
-                console.log("typeof globalThis.MozWebSocket !== \"undefined\"");
-            }
+        if (typeof window !== "undefined") {
+            // @ts-expect-error WebSocket may not exist in this context.
+            IsomorphousWebSocket = window.WebSocket || window.MozWebSocket;
+        } else if (typeof global !== "undefined") {
+            // @ts-expect-error WebSocket may not exist in this context.
+            IsomorphousWebSocket = global.WebSocket || global.MozWebSocket;
+        } else if (typeof self !== "undefined") {
+            // @ts-expect-error WebSocket may not exist in this context.
+            IsomorphousWebSocket = self.WebSocket || self.MozWebSocket;
+        } else if (typeof WebSocket !== "undefined") {
+            IsomorphousWebSocket = WebSocket;
+            // @ts-expect-error WebSocket may not exist in this context.
+        } else if (typeof MozWebSocket !== "undefined") {
+            // @ts-expect-error WebSocket may not exist in this context.
+            IsomorphousWebSocket = MozWebSocket as WebSocket;
         }
 
-        if (!IsomorphousWebSocket) {
-            if (typeof window !== "undefined") {
-                // @ts-expect-error WebSocket may not exist in this context.
-                IsomorphousWebSocket = window.WebSocket || window.MozWebSocket;
-                console.log("typeof window !== \"undefined\"");
-            } else if (typeof global !== "undefined") {
-                // @ts-expect-error WebSocket may not exist in this context.
-                IsomorphousWebSocket = global.WebSocket || global.MozWebSocket;
-                console.log("typeof window !== \"undefined\"");
-            } else if (typeof self !== "undefined") {
-                // @ts-expect-error WebSocket may not exist in this context.
-                IsomorphousWebSocket = self.WebSocket || self.MozWebSocket;
-                console.log("typeof window !== \"undefined\"");
-            }
-        }
-
-        console.log("WebSocket implementation found:", util.inspect(IsomorphousWebSocket, { depth: 10 }));
         return IsomorphousWebSocket;
     }
 }
