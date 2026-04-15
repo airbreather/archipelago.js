@@ -1,4 +1,4 @@
-import { describe, afterAll, test } from "bun:test";
+import { afterAll, describe, expect, test } from "vitest";
 
 import { Client } from "../../src";
 
@@ -6,11 +6,11 @@ describe("smoke tests", () => {
     const client = new Client();
     afterAll(() => client.socket.disconnect());
 
-    test("smoke test", async () => {
+    test("smoke test", { tags: ["integration"] }, async () => {
         const url = "ws://localhost:38281";
         const slotName = "APQuestPlayer";
 
-        await client.login(url, slotName, "APQuest");
+        expect(await client.login(url, slotName, "APQuest")).not.toBeFalsy();
 
         const unlikelyMessage = "it is unlikely that someone would send this message especially with this speling error";
 

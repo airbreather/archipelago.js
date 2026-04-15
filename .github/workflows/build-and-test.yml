@@ -17,6 +17,11 @@ jobs:
         image: quay.io/airbreather/archipelagomw-server:20260414
         ports:
           - 38281:38281
+        options: >-
+          --health-cmd 'grep -qr 'websockets.server.*server listening' /opt/Archipelago/logs'
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - uses: actions/checkout@v6
@@ -28,16 +33,10 @@ jobs:
         run: bun install
 
       - name: Run tests
-        run: bun test --coverage --coverage-reporter=lcov
+        run: bun run full-test:coverage
 
-      - name: Setup LCOV
+      - name: 'Report Coverage'
         if: (!cancelled())
-        uses: hrishikesh-kadam/setup-lcov@v1
-
-      - name: Report coverage
-        if: (!cancelled())
-        uses: zgosalvez/github-actions-report-lcov@v7
+        uses: davelosert/vitest-coverage-report-action@v2
         with:
-          coverage-files: coverage/lcov.info
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          artifact-name: code-coverage-report
+          file-coverage-mode: 'all'

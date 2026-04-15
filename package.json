@@ -19,7 +19,11 @@
     "scripts": {
         "docs": "typedoc --options typedoc.json",
         "lint": "eslint src test",
-        "prepack": "bun run lint && bun build --sourcemap=linked --production --outdir=dist src/index.ts"
+        "prepack": "bun run lint && bun build --sourcemap=linked --production --outdir=dist src/index.ts",
+        "test": "vitest --tags-filter='!integration'",
+        "test:coverage": "$npm_execpath run test --coverage",
+        "full-test": "vitest",
+        "full-test:coverage": "$npm_execpath run full-test --coverage"
     },
     "homepage": "https://archipelago.js.org",
     "repository": "https://github.com/airbreather/archipelago.js.git",
@@ -30,11 +34,14 @@
         "@stylistic/eslint-plugin": "^5.10.0",
         "@types/bun": "1.3.4",
         "@typhonjs-typedoc/typedoc-theme-dmt": "^0.4.0",
+        "@vitest/coverage-v8": "^4.1.4",
+        "@vitest/eslint-plugin": "^1.6.15",
         "eslint": "^10.1.0",
         "eslint-plugin-jsdoc": "^62.8.0",
         "eslint-plugin-simple-import-sort": "^12.1.1",
         "typedoc": "^0.28.17",
         "typescript": "^5.9.3",
-        "typescript-eslint": "^8.57.1"
+        "typescript-eslint": "^8.57.1",
+        "vitest": "^4.1.4"
     }
 }
