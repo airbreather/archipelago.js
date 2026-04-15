@@ -2,6 +2,8 @@ import { afterAll, describe, expect, test } from "vitest";
 
 import { Client } from "../../src";
 
+(globalThis as { WebSocket: typeof WebSocket }).WebSocket = WebSocket;
+
 describe("smoke tests", () => {
     const client = new Client();
     afterAll(() => client.socket.disconnect());
