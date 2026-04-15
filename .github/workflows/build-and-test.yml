@@ -18,7 +18,7 @@ jobs:
         ports:
           - 38281:38281
         options: >-
-          --health-cmd 'grep -qr 'websockets.server.*server listening' /opt/Archipelago/logs'
+          --health-cmd "grep -qr 'websockets.server.*server listening' /opt/Archipelago/logs"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
