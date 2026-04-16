@@ -9,9 +9,7 @@
     "author": "Zach Parks <zach@alliware.com>",
     "browserslist": [
         ">0.2%",
-        "not dead",
-        "not ie <= 11",
-        "not op_mini all"
+        "not dead"
     ],
     "engines": {
         "node": ">= 18.0.0"

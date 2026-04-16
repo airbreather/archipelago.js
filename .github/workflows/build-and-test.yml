@@ -14,6 +14,14 @@ jobs:
 
     services:
       archipelago:
+        # build locally by running "podman build . -t something/whatever" in:
+        #   test/integration/smoke-test
+        # to get it hosted on quay.io (you need an account, it's free today):
+        #   - rename Containerfile to Dockerfile
+        #   - zip up the relevant files in that folder (if you're lazy, just zip it all up)
+        #   - have quay.io run a build using that zip file
+        # in future commits on this branch, we'll see about making that easier. for now,
+        # I need to stop somewhere, and this seems like as appropriate a place as any.
         image: quay.io/airbreather/archipelagomw-server:20260414
         ports:
           - 38281:38281
