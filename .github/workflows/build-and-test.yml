@@ -33,7 +33,7 @@ jobs:
         run: bun install
 
       - name: Run tests
-        run: bun run full-test:coverage
+        run: bun run --bun vitest --coverage
 
       - name: 'Report Coverage'
         if: (!cancelled())

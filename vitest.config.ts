@@ -5,11 +5,11 @@ export default defineConfig({
         tags: [
             {
                 name: "integration",
-                title: "Integration Tests",
                 description: "Tests that require Archipelago to be running",
             },
         ],
         coverage: {
+            provider: "istanbul",
             include: ["src/**/*.{ts,tsx}"],
             reporter: ["text", "json", "json-summary"],
             reportOnFailure: true,
