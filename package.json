@@ -20,7 +20,8 @@
     "scripts": {
         "docs": "typedoc --options typedoc.json",
         "lint": "eslint src test",
-        "prepack": "$npm_execpath run lint && bun build --sourcemap=linked --production --outdir=dist src/index.ts"
+        "prepack": "$npm_execpath run lint && bun build --sourcemap=linked --production --outdir=dist src/index.ts",
+        "test": "vitest --tags-filter=!integration"
     },
     "homepage": "https://archipelago.js.org",
     "repository": "https://github.com/airbreather/archipelago.js.git",
