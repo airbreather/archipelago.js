@@ -1,15 +1,19 @@
 import dts from "bun-plugin-dts";
 
-await Bun.build({
+const baseConfig: Bun.BuildConfig = {
     entrypoints: ["./src/index.ts"],
     outdir: "./dist",
+    sourcemap: "linked",
+};
+
+await Bun.build({
+    ...baseConfig,
     plugins: [dts()],
 });
 
 // Standalone.
 await Bun.build({
-    entrypoints: ["./src/index.ts"],
-    outdir: "./dist",
+    ...baseConfig,
     naming: "[dir]/archipelago.min.[ext]",
     minify: true,
 });
