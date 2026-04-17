@@ -4,10 +4,11 @@
     "description": "A runtime-agnostic and zero dependency TypeScript/JavaScript library for communicating with Archipelago servers.",
     "license": "MIT",
     "type": "module",
+    "main": "./dist/index.js",
     "exports": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "files": [
-        "dist"
+        "./dist"
     ],
     "sideEffects": false,
     "author": "Zach Parks <zach@alliware.com>",
