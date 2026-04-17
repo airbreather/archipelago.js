@@ -7,12 +7,15 @@ import { hintStatuses } from "../../constants.ts";
 export interface UpdateHintPacket {
     readonly cmd: "UpdateHint"
 
-    /** The location id to update. */
+    /** The ID of the location to update the hint for. If no hint exists for this location, the packet is ignored. */
     readonly location: number
 
-    /** The id of the sending player. */
+    /** The ID of the player whose location is being hinted for. */
     readonly player: number
 
-    /** The status to set these hints to, if provided. */
+    /**
+     * Optional. If included, sets the status of the hint to this status. Cannot set {@link hintStatuses.found}, or
+     * change the status from {@link hintStatuses.found}.
+     */
     readonly status: typeof hintStatuses[keyof typeof hintStatuses]
 }

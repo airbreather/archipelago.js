@@ -314,7 +314,9 @@ export class Client {
             .send({ cmd: "LocationScouts", create_as_hint: createHint, locations })
             .wait("locationInfo", (packet) => {
                 // Easy way to check if both lists are identical.
-                return packet.locations.map((location) => location.location).toSorted().join(",") === locations.toSorted().join(",");
+                const existing = new Set<number>(packet.locations.map((location) => location.location));
+                const received = new Set<number>(locations);
+                return existing.size === received.size && [...existing].every((value) => received.has(value));
             });
 
         return response.locations.map((item) => new Item(
