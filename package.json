@@ -1,28 +1,29 @@
 {
     "name": "@airbreather/archipelago.js",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "description": "A runtime-agnostic and zero dependency TypeScript/JavaScript library for communicating with Archipelago servers.",
     "license": "MIT",
     "type": "module",
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts",
     "author": "Zach Parks <zach@alliware.com>",
     "browserslist": [
         ">0.2%",
         "not dead"
     ],
-    "engines": {
-        "node": ">= 18.0.0"
-    },
+    "exports": "./dist/index.js",
+    "types": "./dist/index.d.ts",
     "files": [
         "dist"
     ],
+    "engines": {
+        "node": ">= 18.0.0"
+    },
     "scripts": {
         "docs": "typedoc --options typedoc.json",
         "lint": "eslint src test",
-        "prepack": "$npm_execpath run lint && bun build --sourcemap=linked --production --outdir=dist src/index.ts",
+        "prepack": "$npm_execpath run lint && bun build.ts",
         "test": "vitest --tags-filter=!integration"
     },
+    "sideEffects": false,
     "homepage": "https://archipelago.js.org",
     "repository": "https://github.com/airbreather/archipelago.js.git",
     "bugs": "https://github.com/ThePhar/archipelago.js/issues",
@@ -34,6 +35,7 @@
         "@typhonjs-typedoc/typedoc-theme-dmt": "^0.4.0",
         "@vitest/coverage-istanbul": "^4.1.4",
         "@vitest/eslint-plugin": "^1.6.16",
+        "bun-plugin-dts": "^0.4.0",
         "eslint": "^10.2.0",
         "eslint-plugin-jsdoc": "^62.9.0",
         "eslint-plugin-simple-import-sort": "^13.0.0",
