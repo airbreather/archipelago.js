@@ -1,6 +1,4 @@
-// @ts-check
-// noinspection JSCheckFunctionSignatures
-
+import { defineConfig } from 'eslint/config';
 import eslint from "@eslint/js";
 import stylistic from "@stylistic/eslint-plugin";
 import vitest from "@vitest/eslint-plugin";
@@ -8,7 +6,7 @@ import jsdoc from "eslint-plugin-jsdoc";
 import importSort from "eslint-plugin-simple-import-sort";
 import tslint from "typescript-eslint";
 
-export default tslint.config(
+export default defineConfig(
     eslint.configs.recommended,
     ...tslint.configs.recommendedTypeChecked,
     stylistic.configs.recommended,

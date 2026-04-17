@@ -17,6 +17,7 @@
     },
     "include": [
         "build.ts",
+        "eslint.config.ts",
         "vitest.config.ts",
         "src",
         "test"

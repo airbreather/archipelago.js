@@ -4,15 +4,16 @@
     "description": "A runtime-agnostic and zero dependency TypeScript/JavaScript library for communicating with Archipelago servers.",
     "license": "MIT",
     "type": "module",
-    "author": "Zach Parks <zach@alliware.com>",
-    "browserslist": [
-        ">0.2%",
-        "not dead"
-    ],
     "exports": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "files": [
         "dist"
+    ],
+    "sideEffects": false,
+    "author": "Zach Parks <zach@alliware.com>",
+    "browserslist": [
+        ">0.2%",
+        "not dead"
     ],
     "engines": {
         "node": ">= 18.0.0"
@@ -20,10 +21,9 @@
     "scripts": {
         "docs": "typedoc --options typedoc.json",
         "lint": "eslint src test",
-        "prepack": "$npm_execpath run lint && bun build.ts",
+        "prepack": "bun run --bun lint && bun build.ts",
         "test": "vitest --tags-filter=!integration"
     },
-    "sideEffects": false,
     "homepage": "https://archipelago.js.org",
     "repository": "https://github.com/airbreather/archipelago.js.git",
     "bugs": "https://github.com/ThePhar/archipelago.js/issues",

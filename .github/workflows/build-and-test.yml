@@ -15,7 +15,7 @@ jobs:
     services:
       archipelago:
         # build locally by running "podman build . -t something/whatever" in:
-        #   test/integration/smoke-test
+        #   test/integration/server-files
         # to get it hosted on quay.io (you need an account, it's free today):
         #   - rename Containerfile to Dockerfile
         #   - zip up the relevant files in that folder (if you're lazy, just zip it all up)
@@ -46,7 +46,8 @@ jobs:
       - name: Build prerelease package
         run: bun pm pack --filename artifact.tgz
 
-      - uses: actions/upload-artifact@v7
+      - name: Upload prerelease package
+        uses: actions/upload-artifact@v7
         with:
           path: artifact.tgz
           archive: false
