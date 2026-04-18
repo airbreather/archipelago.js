@@ -26,9 +26,6 @@ describe("smoke tests", { tags: ["integration"], timeout: 5000 }, () => {
 
         await client.messages.say(unlikelyMessage);
         await messageReceived;
-
-        await client.messages.say("!admin login hunter2");
-        await client.messages.say("!admin haha nice");
     });
 
     test.each([
