@@ -91,10 +91,13 @@ export class ItemsManager extends EventBasedManager<ItemEvents> {
         for (let i = 0; i < hints.length; i++) {
             const networkHintKey = Hint.getUniqueKey(hints[i]);
             const matchingHintIndex = this.#hintIndexLookup.get(networkHintKey);
-            if (matchingHintIndex !== undefined && this.#hints[matchingHintIndex].found !== hints[i].found) {
+            if (matchingHintIndex !== undefined && this.#hints[matchingHintIndex].status !== hints[i].status) {
                 const newHint = new Hint(this.#client, hints[i]);
                 this.#hints[matchingHintIndex] = newHint;
-                this.emit("hintFound", [newHint]);
+                if (hints[i].found) {
+                    this.emit("hintFound", [newHint]);
+                }
+                this.emit("hintUpdated", [newHint]);
             } else if (matchingHintIndex === undefined) {
                 const newHint = new Hint(this.#client, hints[i]);
                 this.#hintIndexLookup.set(newHint.uniqueKey, this.#hints.length);

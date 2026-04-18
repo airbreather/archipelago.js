@@ -1,7 +1,7 @@
 import { hintStatuses } from "../../constants.ts";
 
 /**
- * Sent by the client to update hint status for a specified location.
+ * Sent to the server to update the status of a Hint. The client must be the 'receiving_player' of the Hint, or the update fails.
  * @category Network Packets
  */
 export interface UpdateHintPacket {

@@ -26,6 +26,12 @@ export type ItemEvents = {
     hintFound: [hint: Hint]
 
     /**
+     * Fired when a hint has been updated.
+     * @param hint The hint that has been updated.
+     */
+    hintUpdated: [hint: Hint]
+
+    /**
      * Fired shortly after initial connection with all current hints relevant to this player.
      * @param hints All hints ever created relevant to this player.
      */

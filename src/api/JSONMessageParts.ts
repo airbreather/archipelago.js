@@ -1,3 +1,5 @@
+import { hintStatuses } from "./constants.ts";
+
 /**
  * A textual node containing item metadata.
  * @see {@link JSONMessagePart} for all possible message part node subtypes.
@@ -14,6 +16,21 @@ export type ItemJSONMessagePart = {
 
     /** The `id` of the player who owns this item. */
     readonly player: number
+};
+
+/**
+ * A textual node containing item metadata.
+ * @see {@link JSONMessagePart} for all possible message part node subtypes.
+ */
+export type HintStatusJSONMessagePart = {
+    /** Used to denote the intent of the message part. */
+    readonly type: "hint_status"
+
+    /** Used to supply text data for this node. */
+    readonly text: string
+
+    /** The status of the hint */
+    readonly hint_status: typeof hintStatuses
 };
 
 /**
@@ -70,7 +87,8 @@ export type JSONMessagePart =
     | ItemJSONMessagePart
     | LocationJSONMessagePart
     | ColorJSONMessagePart
-    | TextJSONMessagePart;
+    | TextJSONMessagePart
+    | HintStatusJSONMessagePart;
 
 /**
  * This is a type union of all supported message types for denoting the intent of the message part. This can be used to
@@ -95,6 +113,7 @@ export type ValidJSONMessagePartType =
     | "location_id"
     | "location_name"
     | "entrance_name"
+    | "hint_status"
     | "color";
 
 /**

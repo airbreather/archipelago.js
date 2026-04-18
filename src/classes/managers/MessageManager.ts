@@ -5,6 +5,7 @@ import { Client } from "../Client.ts";
 import { Item } from "../Item.ts";
 import {
     ColorMessageNode,
+    HintStatusMessageNode,
     ItemMessageNode,
     LocationMessageNode,
     MessageNode,
@@ -96,6 +97,11 @@ export class MessageManager extends EventBasedManager<MessageEvents> {
 
                 case "color": {
                     nodes.push(new ColorMessageNode(this.#client, part));
+                    break;
+                }
+
+                case "hint_status": {
+                    nodes.push(new HintStatusMessageNode(this.#client, part));
                     break;
                 }
 

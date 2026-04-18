@@ -81,7 +81,6 @@ export class Client {
         } else {
             this.options = { ...defaultClientOptions };
         }
-
         // Setup disconnection event handler to reset internal state.
         this.socket
             .on("disconnected", () => {
@@ -337,6 +336,18 @@ export class Client {
      */
     public hint(locations: number[], player?: number, status?: typeof hintStatuses[keyof typeof hintStatuses]): void {
         this.socket.send({ cmd: "CreateHints", locations, player, status });
+    }
+
+    public updateHint(location: { id: number, player: number }, status: typeof hintStatuses[keyof typeof hintStatuses]) {
+        if (!this.authenticated) {
+            throw new UnauthenticatedError("Cannot update hints while not connected and authenticated.");
+        }
+
+        if (status === hintStatuses.found) {
+            throw new Error("Cannot update status of hint to HINT_FOUND");
+        }
+
+        this.socket.send({ cmd: "UpdateHint", location: location.id, player: location.player, status });
     }
 
     /**
