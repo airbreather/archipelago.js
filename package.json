@@ -21,8 +21,7 @@
     },
     "scripts": {
         "docs": "typedoc --options typedoc.json",
-        "lint": "eslint src test",
-        "prepack": "bun run --bun lint && bun build.ts",
+        "prepack": "bun run --bun eslint && bun build.ts",
         "test": "vitest --tags-filter=!integration"
     },
     "homepage": "https://archipelago.js.org",
@@ -39,7 +38,9 @@
         "bun-plugin-dts": "^0.4.0",
         "eslint": "^10.2.0",
         "eslint-plugin-jsdoc": "^62.9.0",
+        "eslint-plugin-package-json": "^0.91.1",
         "eslint-plugin-simple-import-sort": "^13.0.0",
+        "jiti": "^2.6.1",
         "typedoc": "^0.28.19",
         "typescript": "^6.0.2",
         "typescript-eslint": "^8.58.2",
