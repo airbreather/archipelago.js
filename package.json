@@ -2,32 +2,33 @@
     "name": "@airbreather/archipelago.js",
     "version": "2.2.0",
     "description": "A runtime-agnostic and zero dependency TypeScript/JavaScript library for communicating with Archipelago servers.",
+    "homepage": "https://archipelago.js.org",
+    "bugs": "https://github.com/ThePhar/archipelago.js/issues",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/airbreather/archipelago.js.git"
+    },
     "license": "MIT",
+    "author": "Zach Parks <zach@alliware.com>",
+    "sideEffects": false,
     "type": "module",
+    "exports": {
+      ".": "./dist/index.js"
+    },
     "main": "./dist/index.js",
-    "exports": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "files": [
         "./dist"
     ],
-    "sideEffects": false,
-    "author": "Zach Parks <zach@alliware.com>",
+    "scripts": {
+        "docs": "typedoc --options typedoc.json",
+        "prepack": "bun run --bun eslint && bun build.ts",
+        "test": "vitest --tags-filter=!integration"
+    },
     "browserslist": [
         ">0.2%",
         "not dead"
     ],
-    "engines": {
-        "node": ">= 18.0.0"
-    },
-    "scripts": {
-        "docs": "typedoc --options typedoc.json",
-        "lint": "eslint src test",
-        "prepack": "bun run --bun lint && bun build.ts",
-        "test": "vitest --tags-filter=!integration"
-    },
-    "homepage": "https://archipelago.js.org",
-    "repository": "https://github.com/airbreather/archipelago.js.git",
-    "bugs": "https://github.com/ThePhar/archipelago.js/issues",
     "devDependencies": {
         "@eslint/js": "^10.0.1",
         "@shipgirl/typedoc-plugin-versions": "^0.3.2",
@@ -39,10 +40,15 @@
         "bun-plugin-dts": "^0.4.0",
         "eslint": "^10.2.0",
         "eslint-plugin-jsdoc": "^62.9.0",
+        "eslint-plugin-package-json": "^0.91.1",
         "eslint-plugin-simple-import-sort": "^13.0.0",
+        "jiti": "^2.6.1",
         "typedoc": "^0.28.19",
         "typescript": "^6.0.2",
         "typescript-eslint": "^8.58.2",
         "vitest": "^4.1.4"
+    },
+    "engines": {
+        "node": ">= 18.0.0"
     }
 }

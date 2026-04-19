@@ -14,7 +14,7 @@ export class ItemsManager extends EventBasedManager<ItemEvents> {
     readonly #client: Client;
     #received: Item[] = [];
     #hints: Hint[] = [];
-    #hintIndexLookup: Map<string, number> = new Map();
+    #hintIndexLookup = new Map<string, number>();
 
     /**
      * Instantiates a new ItemsManager.
@@ -88,18 +88,18 @@ export class ItemsManager extends EventBasedManager<ItemEvents> {
     }
 
     #receivedHint(_: string, hints: NetworkHint[]): void {
-        for (let i = 0; i < hints.length; i++) {
-            const networkHintKey = Hint.getUniqueKey(hints[i]);
+        for (const hint of hints) {
+            const networkHintKey = Hint.getUniqueKey(hint);
             const matchingHintIndex = this.#hintIndexLookup.get(networkHintKey);
-            if (matchingHintIndex !== undefined && this.#hints[matchingHintIndex].status !== hints[i].status) {
-                const newHint = new Hint(this.#client, hints[i]);
+            if (matchingHintIndex !== undefined && this.#hints[matchingHintIndex].status !== hint.status) {
+                const newHint = new Hint(this.#client, hint);
                 this.#hints[matchingHintIndex] = newHint;
-                if (hints[i].found) {
+                if (hint.found) {
                     this.emit("hintFound", [newHint]);
                 }
                 this.emit("hintUpdated", [newHint]);
             } else if (matchingHintIndex === undefined) {
-                const newHint = new Hint(this.#client, hints[i]);
+                const newHint = new Hint(this.#client, hint);
                 this.#hintIndexLookup.set(newHint.uniqueKey, this.#hints.length);
                 this.#hints.push(newHint);
                 this.emit("hintReceived", [newHint]);

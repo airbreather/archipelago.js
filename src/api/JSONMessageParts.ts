@@ -1,5 +1,11 @@
 import { hintStatuses } from "./constants.ts";
 
+/* eslint-disable @typescript-eslint/consistent-type-definitions --
+ *
+ * Since this has already shipped, it's TECHNICALLY a breaking change to turn all of these into interfaces.
+ * While it's highly unlikely that anyone would ever notice, let's save such things for the next major version bump.
+ */
+
 /**
  * A textual node containing item metadata.
  * @see {@link JSONMessagePart} for all possible message part node subtypes.
@@ -77,6 +83,8 @@ export type TextJSONMessagePart = {
     /** Used to supply text data for this node. */
     readonly text: string
 };
+
+/* eslint-enable @typescript-eslint/consistent-type-definitions */
 
 /**
  * A union of all message node subtypes sent along with {@link PrintJSONPacket}, which can be reconstructed into a
