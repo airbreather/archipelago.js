@@ -14,7 +14,7 @@ export class ItemsManager extends EventBasedManager<ItemEvents> {
     readonly #client: Client;
     #received: Item[] = [];
     #hints: Hint[] = [];
-    #hintIndexLookup: Map<string, number> = new Map();
+    #hintIndexLookup = new Map<string, number>();
 
     /**
      * Instantiates a new ItemsManager.

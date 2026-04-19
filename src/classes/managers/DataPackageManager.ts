@@ -7,9 +7,9 @@ import { PackageMetadata } from "../PackageMetadata.ts";
  */
 export class DataPackageManager {
     readonly #client: Client;
-    readonly #packages: Map<string, PackageMetadata> = new Map();
-    readonly #checksums: Map<string, string> = new Map();
-    readonly #games: Set<string> = new Set();
+    readonly #packages = new Map<string, PackageMetadata>();
+    readonly #checksums = new Map<string, string>();
+    readonly #games = new Set<string>();
     #cache: DataPackageCache | null = null;
 
     /**

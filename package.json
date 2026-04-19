@@ -2,31 +2,30 @@
     "name": "@airbreather/archipelago.js",
     "version": "2.2.0",
     "description": "A runtime-agnostic and zero dependency TypeScript/JavaScript library for communicating with Archipelago servers.",
+    "homepage": "https://archipelago.js.org",
+    "bugs": "https://github.com/ThePhar/archipelago.js/issues",
+    "repository": "https://github.com/airbreather/archipelago.js.git",
     "license": "MIT",
+    "author": "Zach Parks <zach@alliware.com>",
+    "sideEffects": false,
     "type": "module",
+    "exports": {
+  ".": "./dist/index.js"
+},
     "main": "./dist/index.js",
-    "exports": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "files": [
         "./dist"
     ],
-    "sideEffects": false,
-    "author": "Zach Parks <zach@alliware.com>",
-    "browserslist": [
-        ">0.2%",
-        "not dead"
-    ],
-    "engines": {
-        "node": ">= 18.0.0"
-    },
     "scripts": {
         "docs": "typedoc --options typedoc.json",
         "prepack": "bun run --bun eslint && bun build.ts",
         "test": "vitest --tags-filter=!integration"
     },
-    "homepage": "https://archipelago.js.org",
-    "repository": "https://github.com/airbreather/archipelago.js.git",
-    "bugs": "https://github.com/ThePhar/archipelago.js/issues",
+    "browserslist": [
+        ">0.2%",
+        "not dead"
+    ],
     "devDependencies": {
         "@eslint/js": "^10.0.1",
         "@shipgirl/typedoc-plugin-versions": "^0.3.2",
@@ -45,5 +44,8 @@
         "typescript": "^6.0.2",
         "typescript-eslint": "^8.58.2",
         "vitest": "^4.1.4"
+    },
+    "engines": {
+        "node": ">= 18.0.0"
     }
 }
