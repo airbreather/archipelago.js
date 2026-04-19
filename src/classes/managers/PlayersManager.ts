@@ -88,15 +88,9 @@ export class PlayersManager extends EventBasedManager<PlayerEvents> {
      * }
      */
     public get teams(): Player[][] {
-        const players: Player[][] = [];
-        for (let team = 0; team < this.#players.length; team++) {
-            players[team] = [];
-            for (const player of this.#players[team]) {
-                players[team].push(new Player(this.#client, player));
-            }
-        }
-
-        return players;
+        return this.#players.map((team) =>
+            team.map((player) => new Player(this.#client, player)),
+        );
     }
 
     /**
