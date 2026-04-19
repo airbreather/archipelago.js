@@ -4,7 +4,10 @@
     "description": "A runtime-agnostic and zero dependency TypeScript/JavaScript library for communicating with Archipelago servers.",
     "homepage": "https://archipelago.js.org",
     "bugs": "https://github.com/ThePhar/archipelago.js/issues",
-    "repository": "https://github.com/airbreather/archipelago.js.git",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/airbreather/archipelago.js.git"
+    },
     "license": "MIT",
     "author": "Zach Parks <zach@alliware.com>",
     "sideEffects": false,
