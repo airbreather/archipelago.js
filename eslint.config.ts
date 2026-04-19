@@ -1,3 +1,4 @@
+import type { RulesConfig } from "@eslint/core";
 import eslint from "@eslint/js";
 import stylistic from "@stylistic/eslint-plugin";
 import vitest from "@vitest/eslint-plugin";
@@ -6,6 +7,42 @@ import { jsdoc } from "eslint-plugin-jsdoc";
 import packageJson from "eslint-plugin-package-json";
 import importSort from "eslint-plugin-simple-import-sort";
 import tslint from "typescript-eslint";
+
+// these PREFERENCES have been INFERRED from the code base. prior to the change that adds this, there was no explicit
+// ESLint configuration for them one way or the other. after fixing some oversights that had prevented some ESLint rules
+// from running on some files, it looks like there are some strong preferences for these non-defaults. there are other
+// rule configurations that are needed for completely different reasons, so separate them out like this.
+const inferredPreferences: RulesConfig = {
+    "@stylistic/member-delimiter-style": ["error", {
+        multiline: {
+            delimiter: "none",
+            requireLast: true,
+        },
+        singleline: {
+            delimiter: "comma",
+            requireLast: false,
+        },
+    }],
+    "@stylistic/operator-linebreak": ["error", "after", {
+        overrides: {
+            "|": "before",
+        },
+    }],
+    "@typescript-eslint/no-inferrable-types": "off",
+    "@typescript-eslint/non-nullable-type-assertion-style": "off",
+};
+
+// unlike the things in inferredPreferences above, these are rules that (in this author's opinion) SHOULDN'T be disabled
+// regardless of preference because the alternative makes it too easy to lie to the type checker. as expected, such lies
+// make up the majority of issues that you would get by removing these suppressions. a future commit on this branch will
+// remove these in favor of applying only targeted suppressions on only the existing issues where it would be a breaking
+// change to fix them. for now, they are disabled globally so that the next commit on this branch can JUST auto-fix all
+// auto-fixable issues.
+const compatibilitySuppressions: RulesConfig = {
+    "@typescript-eslint/consistent-indexed-object-style": "off",
+    "@typescript-eslint/consistent-object-style": "off",
+    "@typescript-eslint/consistent-type-definitions": "off",
+};
 
 export default defineConfig(
     {
@@ -42,11 +79,8 @@ export default defineConfig(
             "simple-import-sort": importSort,
         },
         rules: {
-            "@stylistic/operator-linebreak": ["error", "after", {
-                overrides: {
-                    "|": "before",
-                },
-            }],
+            ...inferredPreferences,
+            ...compatibilitySuppressions,
             "simple-import-sort/imports": "error",
             "simple-import-sort/exports": "error",
         },
