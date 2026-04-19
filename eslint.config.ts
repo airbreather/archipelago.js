@@ -32,18 +32,6 @@ const inferredPreferences: RulesConfig = {
     "@typescript-eslint/non-nullable-type-assertion-style": "off",
 };
 
-// unlike the things in inferredPreferences above, these are rules that (in this author's opinion) SHOULDN'T be disabled
-// regardless of preference because the alternative makes it too easy to lie to the type checker. as expected, such lies
-// make up the majority of issues that you would get by removing these suppressions. a future commit on this branch will
-// remove these in favor of applying only targeted suppressions on only the existing issues where it would be a breaking
-// change to fix them. for now, they are disabled globally so that the next commit on this branch can JUST auto-fix all
-// auto-fixable issues.
-const compatibilitySuppressions: RulesConfig = {
-    "@typescript-eslint/consistent-indexed-object-style": "off",
-    "@typescript-eslint/consistent-object-style": "off",
-    "@typescript-eslint/consistent-type-definitions": "off",
-};
-
 export default defineConfig(
     {
         ignores: ["node_modules", "dist", "docs", "coverage"],
@@ -80,7 +68,6 @@ export default defineConfig(
         },
         rules: {
             ...inferredPreferences,
-            ...compatibilitySuppressions,
             "simple-import-sort/imports": "error",
             "simple-import-sort/exports": "error",
         },
