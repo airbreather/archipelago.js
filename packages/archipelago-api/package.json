@@ -1,0 +1,21 @@
+{
+	"name": "@airbreather/archipelago-api",
+	"version": "1.0.0",
+	"description": "A package that I forgot to update the description for.",
+	"homepage": "https://example.com",
+	"bugs": "https://example.com",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/airbreather/archipelago.js.git"
+	},
+	"license": "MIT",
+	"author": "Zach Parks <zach@alliware.com>",
+	"sideEffects": false,
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts",
+		"./constants": "./src/constants/index.ts",
+		"./types": "./src/types.ts"
+	},
+	"files": ["src"]
+}
