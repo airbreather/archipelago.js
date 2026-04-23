@@ -1,12 +1,12 @@
 {
-    "name": "@airbreather/archipelago.js",
-    "version": "2.2.0",
+    "name": "archipelago.js",
+    "version": "2.1.0",
     "description": "A runtime-agnostic and zero dependency TypeScript/JavaScript library for communicating with Archipelago servers.",
     "homepage": "https://archipelago.js.org",
     "bugs": "https://github.com/ThePhar/archipelago.js/issues",
     "repository": {
         "type": "git",
-        "url": "https://github.com/airbreather/archipelago.js.git"
+        "url": "https://github.com/ThePhar/archipelago.js.git"
     },
     "license": "MIT",
     "author": "Zach Parks <zach@alliware.com>",
