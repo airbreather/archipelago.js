@@ -1,6 +1,6 @@
 {
 	"name": "@airbreather/archipelago-api",
-	"version": "1.0.0-pre.1",
+	"version": "1.0.0",
 	"description": "A subset of the archipelago.js package which ONLY contains the type declarations needed to implement the network protocol.",
 	"homepage": "https://example.com",
 	"bugs": "https://example.com",
@@ -22,17 +22,9 @@
 	"sideEffects": false,
 	"type": "module",
 	"exports": {
-		".": {
-			"types": "./src/index.ts",
-			"default": "./src/index.ts"
-		},
-		"./constants": {
-			"types": "./src/constants/index.ts",
-			"default": "./src/constants/index.ts"
-		},
-		"./types": {
-			"types": "./src/types.ts"
-		}
+		".": "./src/index.ts",
+		"./constants": "./src/constants/index.ts",
+		"./types": "./src/types.ts"
 	},
 	"files": [
 		"src"
