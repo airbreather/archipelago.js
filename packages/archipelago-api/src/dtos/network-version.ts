@@ -4,6 +4,8 @@
  * @remarks Archipelago does not follow a semver versioning standard.
  */
 export interface NetworkVersion {
+	/** Apparently required to be present to ensure the Archipelago server parses this object correctly. */
+	class: 'Version';
 	/** The major component of the version number. (e.g., X.0.0) */
 	major: number;
 	/** The minor component of the version number. (e.g., 0.X.0) */
