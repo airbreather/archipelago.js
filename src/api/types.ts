@@ -53,7 +53,6 @@ export interface DataPackageCache {
     getPackage(game: string, checksum?: string): Promise<GamePackage | null>
     /**
      * Called after fetching the data package with the all the game packages that were fetched, so that they can be cached.
-     *
      * @param gamePackages An object where the keys are game names and the values are game packages.
      */
     cachePackages?(gamePackages: Record<string, GamePackage>): void

@@ -32,7 +32,7 @@ export class DataPackageManager {
 
         // Register the default cache only if this environment supports it.
         // Library users can override this with setCache if they wish.
-        if (typeof window === 'object' && typeof window.indexedDB === 'object') {
+        if (typeof window === "object" && typeof window.indexedDB === "object") {
             this.#cache = this.#defaultIndexedDbCache;
         } else {
             this.#cache = null;
@@ -49,7 +49,9 @@ export class DataPackageManager {
     }
 
     /**
-     * Sets up a custom data package caching implementation, which will be used when fetching the data package.
+     * Sets up a custom data package caching implementation.
+     * @param cache An object containing functions to interact with a cache, which will be called when fetching the
+     * data package.
      * @remarks The library provides a default caching mechanism using IndexedDB in environments where IndexedDB
      * is available (which more or less just means in browsers). Setting your own caching implementation overrides
      * the default implementation, meaning that nothing will be either saved to or loaded from the default cache. This
@@ -277,19 +279,22 @@ export class DataPackageManager {
             }
 
             return new Promise((resolve) => {
-                withIDBCacheStore('readwrite', (store) => {
+                withIDBCacheStore("readwrite", (store) => {
                     const getRequest = store.get(`${gameName}-${checksum}`);
 
                     getRequest.onsuccess = () => {
-                        if (getRequest.result === undefined) {
+                        const result = getRequest.result as IDBCacheEntry | undefined;
+
+                        if (result === undefined) {
                             resolve(null);
-                        } else if (getRequest.result.name !== gameName) {
+                        } else if (result.name !== gameName) {
                             // Something went wrong, remove from cache.
                             store.delete(`${gameName}-${checksum}`);
                             resolve(null);
                         } else {
-                            store.put({ ...getRequest.result, lastRead: Date.now() }, `${gameName}-${checksum}`);
-                            resolve(getRequest.result.package);
+                            const entry: IDBCacheEntry = { ...result, lastRead: Date.now() };
+                            store.put(entry, `${gameName}-${checksum}`);
+                            resolve(result.package);
                         }
                     };
                 }, () => {
@@ -298,14 +303,15 @@ export class DataPackageManager {
             });
         },
         cachePackages(dataPackageToSync: Record<string, GamePackage>) {
-            withIDBCacheStore('readwrite', (store) => {
+            withIDBCacheStore("readwrite", (store) => {
                 for (const [gameName, gamePackage] of Object.entries(dataPackageToSync)) {
                     const getRequest = store.get(`${gameName}-${gamePackage.checksum}`);
 
                     getRequest.onsuccess = () => {
                         if (getRequest.result === undefined) {
+                            const entry: IDBCacheEntry = { name: gameName, package: gamePackage, lastRead: Date.now() };
                             const addRequest = store.add(
-                                { name: gameName, package: gamePackage, lastRead: Date.now() },
+                                entry,
                                 `${gameName}-${gamePackage.checksum}`,
                             );
                             addRequest.onerror = (event) => {
@@ -318,7 +324,7 @@ export class DataPackageManager {
 
                 // Prune old game packages from the cache.
                 const MAX_GAME_PACKAGE_AGE_MS = 1000 * 60 * 60 * 24 * 30 * 3; // ~3 months
-                const lastReadIndex = store.index('lastRead');
+                const lastReadIndex = store.index("lastRead");
                 const tooOldRange = IDBKeyRange.upperBound(Date.now() - MAX_GAME_PACKAGE_AGE_MS);
                 const cursorRequest = lastReadIndex.openKeyCursor(tooOldRange);
                 cursorRequest.onsuccess = () => {
@@ -329,21 +335,30 @@ export class DataPackageManager {
                     }
                 };
             });
-        }
-    }
+        },
+    };
+}
+
+interface IDBCacheEntry {
+    name: string
+    package: GamePackage
+    lastRead: number
 }
 
 /**
- * Helper function for getting the data package cache store from the IndexedDB.
+ * Executes a callback with a reference to the data package cache store from the IndexedDB.
+ * @param accessMode The transaction mode to use when getting the store.
+ * @param callback The function to call with the store.
+ * @param onError A callback which will be called when an error is encountered with the IndexedDB.
  */
 function withIDBCacheStore(
     accessMode: IDBTransactionMode,
     callback: (store: IDBObjectStore) => void,
-    onError: () => void = () => {},
+    onError: () => void = () => null,
 ) {
-    const CACHE_DB_NAME = 'DataPackageCacheDatabase';
+    const CACHE_DB_NAME = "DataPackageCacheDatabase";
     const CACHE_DB_VERSION = 2;
-    const CACHE_STORE_NAME = 'dataPackageCache';
+    const CACHE_STORE_NAME = "dataPackageCache";
 
     const dbRequest = window.indexedDB.open(CACHE_DB_NAME, CACHE_DB_VERSION);
 
@@ -358,7 +373,7 @@ function withIDBCacheStore(
 
         if (!db.objectStoreNames.contains(CACHE_STORE_NAME)) {
             const store = db.createObjectStore(CACHE_STORE_NAME);
-            store.createIndex('lastRead', 'lastRead', { unique: false });
+            store.createIndex("lastRead", "lastRead", { unique: false });
         }
     };
 
