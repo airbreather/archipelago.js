@@ -10,7 +10,7 @@ export class DataPackageManager {
     readonly #packages = new Map<string, PackageMetadata>();
     readonly #checksums = new Map<string, string>();
     readonly #games = new Set<string>();
-    #cache: DataPackageCache | null = null;
+    #cache: DataPackageCache | null;
 
     /**
      * Instantiates a new DataPackageManager. Should only be instantiated by creating a new {@link Client}.
@@ -29,6 +29,14 @@ export class DataPackageManager {
                 this.#games.add(game);
             }
         });
+
+        // Register the default cache only if this environment supports it.
+        // Library users can override this with setCache if they wish.
+        if (typeof window === 'object' && typeof window.indexedDB === 'object') {
+            this.#cache = this.#defaultIndexedDbCache;
+        } else {
+            this.#cache = null;
+        }
     }
 
     /**
@@ -40,6 +48,14 @@ export class DataPackageManager {
         return this.#packages.get(game) ?? null;
     }
 
+    /**
+     * Sets up a custom data package caching implementation, which will be used when fetching the data package.
+     * @remarks The library provides a default caching mechanism using IndexedDB in environments where IndexedDB
+     * is available (which more or less just means in browsers). Setting your own caching implementation overrides
+     * the default implementation, meaning that nothing will be either saved to or loaded from the default cache. This
+     * can you give more control over the cache, and is required if you want to have data package caching in a
+     * non-browser environment.
+     */
     public setCache(cache: DataPackageCache) {
         this.#cache = cache;
     }
@@ -105,6 +121,10 @@ export class DataPackageManager {
 
         if (update) {
             this.importPackage(data);
+        }
+
+        if (this.#cache && this.#cache.cachePackages) {
+            this.#cache.cachePackages(data.games);
         }
 
         return data;
@@ -246,4 +266,117 @@ export class DataPackageManager {
             location_name_to_id: { "Cheat Console": -1, "Server": -2 },
         });
     }
+
+    /**
+     * The default cache used in environments where IndexedDB is available.
+     */
+    #defaultIndexedDbCache: DataPackageCache = {
+        getPackage(gameName: string, checksum?: string): Promise<GamePackage | null> {
+            if (!checksum) {
+                return Promise.resolve(null);
+            }
+
+            return new Promise((resolve) => {
+                withIDBCacheStore('readwrite', (store) => {
+                    const getRequest = store.get(`${gameName}-${checksum}`);
+
+                    getRequest.onsuccess = () => {
+                        if (getRequest.result === undefined) {
+                            resolve(null);
+                        } else if (getRequest.result.name !== gameName) {
+                            // Something went wrong, remove from cache.
+                            store.delete(`${gameName}-${checksum}`);
+                            resolve(null);
+                        } else {
+                            store.put({ ...getRequest.result, lastRead: Date.now() }, `${gameName}-${checksum}`);
+                            resolve(getRequest.result.package);
+                        }
+                    };
+                }, () => {
+                    resolve(null);
+                });
+            });
+        },
+        cachePackages(dataPackageToSync: Record<string, GamePackage>) {
+            withIDBCacheStore('readwrite', (store) => {
+                for (const [gameName, gamePackage] of Object.entries(dataPackageToSync)) {
+                    const getRequest = store.get(`${gameName}-${gamePackage.checksum}`);
+
+                    getRequest.onsuccess = () => {
+                        if (getRequest.result === undefined) {
+                            const addRequest = store.add(
+                                { name: gameName, package: gamePackage, lastRead: Date.now() },
+                                `${gameName}-${gamePackage.checksum}`,
+                            );
+                            addRequest.onerror = (event) => {
+                                // Continue with the rest of the transaction even if one insert fails.
+                                event.preventDefault();
+                            };
+                        }
+                    };
+                }
+
+                // Prune old game packages from the cache.
+                const MAX_GAME_PACKAGE_AGE_MS = 1000 * 60 * 60 * 24 * 30 * 3; // ~3 months
+                const lastReadIndex = store.index('lastRead');
+                const tooOldRange = IDBKeyRange.upperBound(Date.now() - MAX_GAME_PACKAGE_AGE_MS);
+                const cursorRequest = lastReadIndex.openKeyCursor(tooOldRange);
+                cursorRequest.onsuccess = () => {
+                    const cursor = cursorRequest.result;
+                    if (cursor) {
+                        store.delete(cursor.primaryKey);
+                        cursor.continue();
+                    }
+                };
+            });
+        }
+    }
+}
+
+/**
+ * Helper function for getting the data package cache store from the IndexedDB.
+ */
+function withIDBCacheStore(
+    accessMode: IDBTransactionMode,
+    callback: (store: IDBObjectStore) => void,
+    onError: () => void = () => {},
+) {
+    const CACHE_DB_NAME = 'DataPackageCacheDatabase';
+    const CACHE_DB_VERSION = 2;
+    const CACHE_STORE_NAME = 'dataPackageCache';
+
+    const dbRequest = window.indexedDB.open(CACHE_DB_NAME, CACHE_DB_VERSION);
+
+    dbRequest.onerror = onError;
+
+    dbRequest.onupgradeneeded = (event) => {
+        const db = dbRequest.result;
+
+        if (event.oldVersion < 2 && db.objectStoreNames.contains(CACHE_STORE_NAME)) {
+            db.deleteObjectStore(CACHE_STORE_NAME);
+        }
+
+        if (!db.objectStoreNames.contains(CACHE_STORE_NAME)) {
+            const store = db.createObjectStore(CACHE_STORE_NAME);
+            store.createIndex('lastRead', 'lastRead', { unique: false });
+        }
+    };
+
+    dbRequest.onsuccess = () => {
+        const db = dbRequest.result;
+
+        const transaction = db.transaction(CACHE_STORE_NAME, accessMode);
+        const store = transaction.objectStore(CACHE_STORE_NAME);
+
+        transaction.onerror = () => {
+            db.close();
+            onError();
+        };
+
+        transaction.oncomplete = () => {
+            db.close();
+        };
+
+        callback(store);
+    };
 }

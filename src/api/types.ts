@@ -47,9 +47,16 @@ export type GamePackage = {
 
 /* eslint-enable @typescript-eslint/consistent-type-definitions */
 
-/** An interface for fetching data packages from a cache, Should return a {@link GamePackage} if available, else null */
+/** An interface for managing a data package cache. */
 export interface DataPackageCache {
+    /** Should return a {@link GamePackage} if available, otherwise null. */
     getPackage(game: string, checksum?: string): Promise<GamePackage | null>
+    /**
+     * Called after fetching the data package with the all the game packages that were fetched, so that they can be cached.
+     *
+     * @param gamePackages An object where the keys are game names and the values are game packages.
+     */
+    cachePackages?(gamePackages: Record<string, GamePackage>): void
 }
 
 /** A type union of all basic JSON-compatible types. */
