@@ -45,16 +45,14 @@ export class DataPackageManager {
     }
 
     /**
-     * Sets up a custom data package caching implementation.
-     * @param cache An object containing functions to interact with a cache, which will be called when fetching the
-     * data package.
-     * @remarks The library provides a default caching mechanism using IndexedDB in environments where IndexedDB
-     * is available (which more or less just means in browsers). Setting your own caching implementation overrides
-     * the default implementation, meaning that nothing will be either saved to or loaded from the default cache. This
-     * can you give more control over the cache, and is required if you want to have data package caching in a
-     * non-browser environment.
+     * Registers a custom data package cache, or disables caching completely.
+     * @param cache A {@link DataPackageCache} implementation, which will be called into when fetching the data package,
+     * or `null` to disable caching completely.
+     * @remarks By default, the library provides a default cache using IndexedDB in browser environments, but providing
+     * a custom cache overrides the default implementation. This can you give more control over the cache if you need
+     * it, and it's required if you want to have data package caching in a non-browser environment.
      */
-    public setCache(cache: DataPackageCache) {
+    public setCache(cache: DataPackageCache | null) {
         this.#cache = cache;
     }
 
