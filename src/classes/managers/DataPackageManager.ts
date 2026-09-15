@@ -122,7 +122,7 @@ export class DataPackageManager {
         }
 
         if (this.#cache && this.#cache.cachePackages) {
-            this.#cache.cachePackages(data.games);
+            await this.#cache.cachePackages(data.games);
         }
 
         return data;

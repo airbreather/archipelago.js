@@ -52,10 +52,13 @@ export interface DataPackageCache {
     /** Should return a {@link GamePackage} if available, otherwise null. */
     getPackage(game: string, checksum?: string): Promise<GamePackage | null>
     /**
-     * Called after fetching the data package with the all the game packages that were fetched, so that they can be cached.
+     * Called after fetching the data package with the all the game packages that were fetched, so that they can be
+     * cached.
      * @param gamePackages An object where the keys are game names and the values are game packages.
+     * @returns A promise which should resolve only once all writes to the cache have been completed. The library
+     * will wait to continue until the promise is resolved.
      */
-    cachePackages?(gamePackages: Record<string, GamePackage>): void
+    cachePackages?(gamePackages: Record<string, GamePackage>): Promise<void>
 }
 
 /** A type union of all basic JSON-compatible types. */

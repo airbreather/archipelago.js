@@ -22,7 +22,7 @@ export class DefaultDPCacheFactory {
         }
 
         return new Promise((resolve) => {
-            this.#withIDBCacheStore("readwrite", (store) => {
+            void this.#withIDBCacheStore("readwrite", (store) => {
                 const getRequest = store.get(`${gameName}-${checksum}`);
 
                 getRequest.onsuccess = () => {
@@ -46,8 +46,8 @@ export class DefaultDPCacheFactory {
         });
     };
 
-    static #cachePackagesToIDB(dataPackageToSync: Record<string, GamePackage>) {
-        this.#withIDBCacheStore("readwrite", (store) => {
+    static #cachePackagesToIDB(dataPackageToSync: Record<string, GamePackage>): Promise<void> {
+        return this.#withIDBCacheStore("readwrite", (store) => {
             for (const [gameName, gamePackage] of Object.entries(dataPackageToSync)) {
                 const getRequest = store.get(`${gameName}-${gamePackage.checksum}`);
 
@@ -86,52 +86,60 @@ export class DefaultDPCacheFactory {
      * @param accessMode The transaction mode to use when getting the store.
      * @param callback The function to call with the store.
      * @param onError A callback which will be called when an error is encountered with the IndexedDB.
+     * @returns A promise resolving when the IndexedDB transaction is closed.
      * @private
      */
     static #withIDBCacheStore(
         accessMode: IDBTransactionMode,
         callback: (store: IDBObjectStore) => void,
         onError: () => void = () => null,
-    ) {
-        const CACHE_DB_NAME = "DataPackageCacheDatabase";
-        const CACHE_DB_VERSION = 2;
-        const CACHE_STORE_NAME = "dataPackageCache";
+    ): Promise<void> {
+        return new Promise((resolve) => {
+            const CACHE_DB_NAME = "DataPackageCacheDatabase";
+            const CACHE_DB_VERSION = 2;
+            const CACHE_STORE_NAME = "dataPackageCache";
 
-        const dbRequest = window.indexedDB.open(CACHE_DB_NAME, CACHE_DB_VERSION);
+            const dbRequest = window.indexedDB.open(CACHE_DB_NAME, CACHE_DB_VERSION);
 
-        dbRequest.onerror = onError;
-
-        dbRequest.onupgradeneeded = (event) => {
-            const db = dbRequest.result;
-
-            if (event.oldVersion < 2 && db.objectStoreNames.contains(CACHE_STORE_NAME)) {
-                db.deleteObjectStore(CACHE_STORE_NAME);
-            }
-
-            if (!db.objectStoreNames.contains(CACHE_STORE_NAME)) {
-                const store = db.createObjectStore(CACHE_STORE_NAME);
-                store.createIndex("lastRead", "lastRead", { unique: false });
-            }
-        };
-
-        dbRequest.onsuccess = () => {
-            const db = dbRequest.result;
-
-            const transaction = db.transaction(CACHE_STORE_NAME, accessMode);
-            const store = transaction.objectStore(CACHE_STORE_NAME);
-
-            transaction.onerror = () => {
-                db.close();
+            dbRequest.onerror = () => {
                 onError();
+                resolve();
             };
 
-            transaction.oncomplete = () => {
-                db.close();
+            dbRequest.onupgradeneeded = (event) => {
+                const db = dbRequest.result;
+
+                if (event.oldVersion < 2 && db.objectStoreNames.contains(CACHE_STORE_NAME)) {
+                    db.deleteObjectStore(CACHE_STORE_NAME);
+                }
+
+                if (!db.objectStoreNames.contains(CACHE_STORE_NAME)) {
+                    const store = db.createObjectStore(CACHE_STORE_NAME);
+                    store.createIndex("lastRead", "lastRead", { unique: false });
+                }
             };
 
-            callback(store);
-        };
-    }
+            dbRequest.onsuccess = () => {
+                const db = dbRequest.result;
+
+                const transaction = db.transaction(CACHE_STORE_NAME, accessMode);
+                const store = transaction.objectStore(CACHE_STORE_NAME);
+
+                transaction.onerror = () => {
+                    db.close();
+                    onError();
+                    resolve();
+                };
+
+                transaction.oncomplete = () => {
+                    db.close();
+                    resolve();
+                };
+
+                callback(store);
+            };
+        });
+    };
 }
 
 interface IDBCacheEntry {
