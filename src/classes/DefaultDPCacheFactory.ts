@@ -16,6 +16,12 @@ export class DefaultDPCacheFactory {
         }
     }
 
+    /**
+     * Implementation of DataPackageCache.getPackage using the IndexedDB.
+     * @param gameName The name of the game to fetch the package for.
+     * @param checksum The checksum of the game package to fetch.
+     * @private
+     */
     static #getPackageFromIDB(gameName: string, checksum?: string): Promise<GamePackage | null> {
         if (!checksum) {
             return Promise.resolve(null);
@@ -46,6 +52,11 @@ export class DefaultDPCacheFactory {
         });
     };
 
+    /**
+     * Implementation of DataPackageCache.cachePackages using the IndexedDB.
+     * @param dataPackageToSync The fetched data package to cache.
+     * @private
+     */
     static #cachePackagesToIDB(dataPackageToSync: Record<string, GamePackage>): Promise<void> {
         return this.#withIDBCacheStore("readwrite", (store) => {
             for (const [gameName, gamePackage] of Object.entries(dataPackageToSync)) {
@@ -82,7 +93,8 @@ export class DefaultDPCacheFactory {
     };
 
     /**
-     * Executes a callback with a reference to the data package cache store from the IndexedDB.
+     * Helper function for the IndexedDB cache: Executes a callback with a reference to the data package cache store
+     * from the IndexedDB.
      * @param accessMode The transaction mode to use when getting the store.
      * @param callback The function to call with the store.
      * @param onError A callback which will be called when an error is encountered with the IndexedDB.
