@@ -1,28 +1,11 @@
 import { DataPackageCache, GamePackage } from "../api";
 
 /**
- * Factory providing a default data package cache that works in the current environment, if one is available.
+ * The default data package cache for browser environments.
  * @internal
  */
-export class DefaultDPCacheFactory {
-    public static getDefaultDPCacheForEnv(): DataPackageCache | null {
-        if (typeof window === "object" && typeof window.indexedDB === "object") {
-            return {
-                getPackage: (...args) => this.#getPackageFromIDB(...args),
-                cachePackages: (...args) => this.#cachePackagesToIDB(...args),
-            };
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Implementation of DataPackageCache.getPackage using the IndexedDB.
-     * @param gameName The name of the game to fetch the package for.
-     * @param checksum The checksum of the game package to fetch.
-     * @private
-     */
-    static #getPackageFromIDB(gameName: string, checksum?: string): Promise<GamePackage | null> {
+export class DefaultIndexedDBCache implements DataPackageCache {
+    getPackage(gameName: string, checksum?: string): Promise<GamePackage | null> {
         if (!checksum) {
             return Promise.resolve(null);
         }
@@ -52,12 +35,7 @@ export class DefaultDPCacheFactory {
         });
     };
 
-    /**
-     * Implementation of DataPackageCache.cachePackages using the IndexedDB.
-     * @param dataPackageToSync The fetched data package to cache.
-     * @private
-     */
-    static #cachePackagesToIDB(dataPackageToSync: Record<string, GamePackage>): Promise<void> {
+    cachePackages(dataPackageToSync: Record<string, GamePackage>): Promise<void> {
         return this.#withIDBCacheStore("readwrite", (store) => {
             for (const [gameName, gamePackage] of Object.entries(dataPackageToSync)) {
                 const getRequest = store.get(`${gameName}-${gamePackage.checksum}`);
@@ -101,7 +79,7 @@ export class DefaultDPCacheFactory {
      * @returns A promise resolving when the IndexedDB transaction is closed.
      * @private
      */
-    static #withIDBCacheStore(
+    #withIDBCacheStore(
         accessMode: IDBTransactionMode,
         callback: (store: IDBObjectStore) => void,
         onError: () => void = () => null,

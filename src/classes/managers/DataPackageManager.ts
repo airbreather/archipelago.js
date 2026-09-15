@@ -1,6 +1,6 @@
 import { DataPackage, DataPackageCache, GamePackage, GetDataPackagePacket } from "../../api";
 import { Client } from "../Client.ts";
-import { DefaultDPCacheFactory } from "../DefaultDPCacheFactory.ts";
+import { DefaultIndexedDBCache } from "../DefaultIndexedDBCache.ts";
 import { PackageMetadata } from "../PackageMetadata.ts";
 
 /**
@@ -30,9 +30,14 @@ export class DataPackageManager {
                 this.#games.add(game);
             }
         });
-        // Register the default cache, if there's one supported by this environment.
+
+        // Register the default cache only if this environment supports it.
         // Library users can override this with setCache if they wish.
-        this.#cache = DefaultDPCacheFactory.getDefaultDPCacheForEnv();
+        if (typeof window === "object" && typeof window.indexedDB === "object") {
+            this.#cache = new DefaultIndexedDBCache();
+        } else {
+            this.#cache = null;
+        }
     }
 
     /**
