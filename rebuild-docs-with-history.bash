@@ -57,7 +57,7 @@ rm -rf old-version-docs
 git clone . old-version-docs
 cd old-version-docs
 rm -rf src test
-git checkout c582895ca560ec66ba0bd6ed4b8214a01b0e88d7 -- src # untagged
+git checkout c582895ca560ec66ba0bd6ed4b8214a01b0e88d7 -- src
 # v2 had accidentally changed the lower-bound to ES2025 with a reduce() call on
 # a MapIterator. we fixed that later, but we need tsconfig.json to agree.
 jq '.compilerOptions.lib = ["ES2025", "DOM"]' tsconfig.json > /tmp/tsc.json
