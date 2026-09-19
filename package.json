@@ -9,7 +9,13 @@
         "url": "https://github.com/airbreather/archipelago.js.git"
     },
     "license": "MIT",
-    "author": "Zach Parks <zach@alliware.com>",
+    "contributors": [
+        "Phara Parks <phara@pharware.com>",
+        "Joe Amenta <airbreather@linux.com>",
+        "DrAwesome4333",
+        "jkap",
+        "MarioManTAW"
+    ],
     "sideEffects": false,
     "type": "module",
     "exports": {

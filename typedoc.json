@@ -19,9 +19,6 @@
         "@shipgirl/typedoc-plugin-versions",
         "@typhonjs-typedoc/typedoc-theme-dmt"
     ],
-    "versions": {
-        "stable": "2.2"
-    },
     "projectDocuments": [
         "./guides/introduction.md",
         "./guides/installation.md",
