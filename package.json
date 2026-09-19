@@ -10,11 +10,11 @@
     },
     "license": "MIT",
     "contributors": [
-        "Phara Parks <phara@pharware.com>",
-        "Joe Amenta <airbreather@linux.com>",
-        "DrAwesome4333",
-        "jkap",
-        "MarioManTAW"
+        { "name": "Phara Parks", "email": "phara@pharware.com" },
+        { "name": "Joe Amenta", "email": "airbreather@linux.com" },
+        { "name": "DrAwesome4333" },
+        { "name": "jkap" },
+        { "name": "MarioManTAW" }
     ],
     "sideEffects": false,
     "type": "module",
