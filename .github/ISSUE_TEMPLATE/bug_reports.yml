@@ -8,30 +8,30 @@ body:
         attributes:
             value: >-
                 Thanks for reporting an issue!
-                
-                
+
+
                 This form is for reporting bugs found in **archipelago.js**
-                (https://github.com/ThePhar/archipelago.js). 
-                
-                
+                (https://github.com/airbreather/archipelago.js).
+
+
                 If you have a question on how to achieve something and are struggling,
                 please post a question in either the
-                [Discussions](https://github.com/ThePhar/archipelago.js/discussions) tab
+                [Discussions](https://github.com/airbreather/archipelago.js/discussions) tab
                 or in the [Archipelago Discord](https://discord.gg/8Z65BR2) server, in
                 the [**#archipelago.js**
                 thread](https://discord.com/channels/731205301247803413/1127258929357934662).
-                
-                
+
+
                 Before submitting a new issue, please verify this bug has not already
                 been reported or a solution was already posted in a Discussion.
-                
-                
+
+
                 * Issues:
-                https://github.com/ThePhar/archipelago.js/issues?q=is%3Aissue+sort%3Aupdated-desc
-                
+                https://github.com/airbreather/archipelago.js/issues?q=is%3Aissue+sort%3Aupdated-desc
+
                 * Discussions: https://github.com/ThePhar/archipelago.js/discussions
-                
-                
+
+
                 Finally, remember, the more information you provide, the easier we can
                 do to reproduce and assist.
     -   type: checkboxes

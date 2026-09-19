@@ -32,10 +32,10 @@ jobs:
           --health-retries 5
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Get Bun
-        uses: oven-sh/setup-bun@v2
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
 
       - name: Install dependencies
         run: bun install
@@ -47,13 +47,13 @@ jobs:
         run: bun pm pack --filename artifact.tgz
 
       - name: Upload prerelease package
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           path: artifact.tgz
           archive: false
 
       - name: Report Coverage
         if: (!cancelled())
-        uses: davelosert/vitest-coverage-report-action@v2
+        uses: davelosert/vitest-coverage-report-action@78f5dcd2c7a08425b7846b4f5344717ec00d3cf7 # v2
         with:
           file-coverage-mode: all

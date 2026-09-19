@@ -303,6 +303,8 @@ $RECYCLE.BIN/
 *.lnk
 
 ### Documentation ###
+# old version directories
+old-version-repos
 # typedoc output
 docs
 

@@ -7,10 +7,10 @@
     "excludeProtected": false,
     "tsconfig": "tsconfig.json",
     "entryPoints": ["src/index.ts"],
-    "cname": "archipelago.js.org",
+    "cname": "archipelagojs.airbreather.dev",
     "categorizeByGroup": false,
     "gitRemote": "origin",
-    "hostedBaseUrl": "https://archipelago.js.org",
+    "hostedBaseUrl": "https://archipelagojs.airbreather.dev",
     "includeVersion": true,
     "theme": "default-modern",
     "customCss": "./assets/api.css",
@@ -19,9 +19,6 @@
         "@shipgirl/typedoc-plugin-versions",
         "@typhonjs-typedoc/typedoc-theme-dmt"
     ],
-    "versions": {
-        "stable": "2.0"
-    },
     "projectDocuments": [
         "./guides/introduction.md",
         "./guides/installation.md",
@@ -31,8 +28,8 @@
 
     "dmtFavicon": "./assets/favicon.png",
     "dmtLinksService": {
-        "GitHub": "https://github.com/ThePhar/archipelago.js",
+        "GitHub": "https://github.com/airbreather/archipelago.js",
         "Discord": "https://discord.gg/8Z65BR2",
-        "NPM": "https://www.npmjs.com/package/archipelago.js"
+        "NPM": "https://www.npmjs.com/package/@airbreather/archipelago.js"
     }
 }
