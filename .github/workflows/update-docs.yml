@@ -1,0 +1,12 @@
+name: Update docs (archipelagojs.airbreather.dev)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish:
+    name: stub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Stub - Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
