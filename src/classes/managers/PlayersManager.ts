@@ -108,13 +108,15 @@ export class PlayersManager extends EventBasedManager<PlayerEvents> {
             return undefined;
         }
 
-        if (playerTeam[slot]) {
-            return new Player(this.#client, playerTeam[slot]);
-        }
-
-        for (let teamSlot of playerTeam) {
-            if (teamSlot.name === slot) {
-                return new Player(this.#client, teamSlot);
+        if (typeof slot === "number") {
+            if (playerTeam[slot]) {
+                return new Player(this.#client, playerTeam[slot]);
+            }
+        } else {
+            for (const teamSlot of playerTeam) {
+                if (teamSlot.name === slot) {
+                    return new Player(this.#client, teamSlot);
+                }
             }
         }
 
