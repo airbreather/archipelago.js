@@ -22,7 +22,7 @@ jobs:
         run: bun install
 
       - name: Build docs
-        run: ./rebuild-docs-with-history.sh
+        run: bash rebuild-docs-with-history.bash
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6
