@@ -1,6 +1,7 @@
 {
     "$schema": "https://typedoc.org/schema.json",
     "name": "archipelago.js",
+    "basePath": "./",
     "cleanOutputDir": false,
     "excludePrivate": true,
     "excludeInternal": true,
