@@ -1,6 +1,6 @@
 {
     "name": "@airbreather/archipelago.js",
-    "version": "2.2.0",
+    "version": "2.2.1",
     "description": "A runtime-agnostic and zero dependency TypeScript/JavaScript library for communicating with Archipelago servers.",
     "homepage": "https://archipelago.js.org",
     "bugs": "https://github.com/airbreather/archipelago.js/issues",
