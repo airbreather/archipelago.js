@@ -168,7 +168,7 @@ export class DataStorageManager {
      * Returns item name groups for this package from data storage API.
      * @param game The game name to look up item name groups for.
      */
-    public async fetchItemNameGroups(game: string): Promise<Record<string, string[]>> {
+    public async fetchItemNameGroups(game: string): Promise<Record<string, Record<string, string[]>>> {
         // Get key and locally cache for faster subsequent lookups.
         return await this.fetch([`_read_item_name_groups_${game}`], true);
     }
@@ -177,7 +177,7 @@ export class DataStorageManager {
      * Returns location name groups for this package from the data storage API.
      * @param game The game name to look up location name groups for.
      */
-    public async fetchLocationNameGroups(game: string): Promise<Record<string, string[]>> {
+    public async fetchLocationNameGroups(game: string): Promise<Record<string, Record<string, string[]>>> {
         // Get key and locally cache for faster subsequent lookups.
         return await this.fetch([`_read_location_name_groups_${game}`], true);
     }

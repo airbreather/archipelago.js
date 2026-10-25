@@ -240,7 +240,7 @@ export type PermissionTable = {
      * - {@link permissions.disabled}: All remaining item query modes disabled.
      * @remarks This command cannot have the {@link permissions.auto} or {@link permissions.autoEnabled} permission.
      */
-    readonly remaining: Omit<PermissionValue, typeof permissions.auto | typeof permissions.autoEnabled>
+    readonly remaining: Exclude<PermissionValue, typeof permissions.auto | typeof permissions.autoEnabled>
 };
 
 /* eslint-enable @typescript-eslint/consistent-type-definitions */
